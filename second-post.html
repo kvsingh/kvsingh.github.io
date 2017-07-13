@@ -1,43 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+          <title>Inhibited Zombies</title>
         <meta charset="utf-8" />
-        <title>Playing around with the breast cancer dataset</title>
-        <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/main.css" />
-        <link href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Inhibited Zombies Atom Feed" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+
+    <meta name="tags" content="python firsts" />
+
 </head>
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https://kvsingh.github.io/">Inhibited Zombies </a></h1>
-                <nav><ul>
-                    <li class="active"><a href="https://kvsingh.github.io/category/posts.html">posts</a></li>
-                </ul></nav>
+                <h1><a href="https://kvsingh.github.io/">Inhibited Zombies <strong></strong></a></h1>
         </header><!-- /#banner -->
+        <nav id="menu"><ul>
+        </ul></nav><!-- /#menu -->
 <section id="content" class="body">
-  <article>
-    <header>
-      <h1 class="entry-title">
-        <a href="https://kvsingh.github.io/second-post.html" rel="bookmark"
-           title="Permalink to Playing around with the breast cancer dataset">Playing around with the breast cancer dataset</a></h1>
-    </header>
-
-    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-07-11T21:00:00+05:30">
-                Published: Tue 11 July 2017
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="https://kvsingh.github.io/author/karanveer-singh.html">Karanveer Singh</a>
-        </address>
-<p>In <a href="https://kvsingh.github.io/category/posts.html">posts</a>.</p>
-<p>tags: <a href="https://kvsingh.github.io/tag/python-firsts.html">python firsts</a> </p>
-</footer><!-- /.post-info -->      <style type="text/css">/*!
+  <header>
+    <h2 class="entry-title">
+      <a href="https://kvsingh.github.io/second-post.html" rel="bookmark"
+         title="Permalink to Playing around with the breast cancer dataset">Playing around with the breast cancer dataset</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2017-07-11T21:00:00+05:30">
+      Tue 11 July 2017
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="https://kvsingh.github.io/author/karanveer-singh.html">Karanveer Singh</a>
+    </address>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <style type="text/css">/*!
 *
 * IPython notebook
 *
@@ -1014,7 +1008,7 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="reduce-code.-the-point-is-not-to-print-all-the-code,-like-you-did-in-the-kernel">reduce code. the point is not to print all the code, like you did in the kernel<a class="anchor-link" href="#reduce-code.-the-point-is-not-to-print-all-the-code,-like-you-did-in-the-kernel">¶</a></h1><p>The <a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic">Breast Cancer Dataset</a>) is a collection of features computed from breast mass of 569 patients. The dataset contains 30 attributes of patients - and a class label telling whether the tumour is malignant or benign. There are a total of 357 benign objects and 212 malignant objects. I decided to use this dataset for my first blog post on machine learning, since its a very straightforward dataset with no missing values and all variables being real valued (no categorical variables). This blog post will help people new to the whole scikit-learn and machine learning world.</p>
+<h1 id="reduce-code.-the-point-is-not-to-print-all-the-code,-like-you-did-in-the-kernel">reduce code. the point is not to print all the code, like you did in the kernel<a class="anchor-link" href="#reduce-code.-the-point-is-not-to-print-all-the-code,-like-you-did-in-the-kernel">¶</a></h1><p>The <a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic">Breast Cancer Dataset</a> is a collection of features computed from breast mass of 569 patients. The dataset contains 30 attributes of patients - and a class label telling whether the tumour is malignant or benign. There are a total of 357 benign objects and 212 malignant objects. I decided to use this dataset for my first blog post on machine learning, since its a very straightforward dataset with no missing values and all variables being real valued (no categorical variables). This blog post will help people new to the whole scikit-learn and machine learning world.</p>
 <p>We start by loading the packages, importing the dataset and mapping 'B' and 'M' class labels to integers, and separating the attributes and class labels.</p>
 </div>
 </div>
@@ -1881,38 +1875,13 @@ ssDSJUmSlAWWLkmSpCywdEmSJGWBpUuSJCkLLF2SJElZ8P8BIMJW9mdJq0QAAAAASUVORK5CYII=
 }
 </script>
 
-    </div><!-- /.entry-content -->
-
-  </article>
+  </div><!-- /.entry-content -->
 </section>
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
-
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
                 </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
         </footer><!-- /#contentinfo -->
-
 </body>
 </html>
