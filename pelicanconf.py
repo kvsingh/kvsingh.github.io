@@ -6,6 +6,7 @@ AUTHOR = u'Karanveer Singh'
 SITENAME = u'Inhibited Zombies'
 SITEURL = 'https://kvsingh.github.io'
 
+
 PATH = 'content'
 
 TIMEZONE = 'Asia/Calcutta'
@@ -37,7 +38,9 @@ PLUGIN_PATH = './plugins'
 PLUGINS = ['ipynb.markup']
 
 #THEME = "/home/karan/pelican-themes/"
-THEME = "aboutwilson"
+#THEME = "aboutwilson"
+#THEME = "blueidea"
+THEME = "iris"
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 
