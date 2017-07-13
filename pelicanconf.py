@@ -36,7 +36,9 @@ MARKUP = ('md', 'ipynb')
 PLUGIN_PATH = './plugins'
 PLUGINS = ['ipynb.markup']
 
-THEME = "/home/karan/pelican-themes/aboutwilson"
+THEME = "/home/karan/pelican-themes/alchemy"
+
+IGNORE_FILES = ['.ipynb_checkpoints']
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
