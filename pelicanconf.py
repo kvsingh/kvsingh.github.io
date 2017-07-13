@@ -36,7 +36,8 @@ MARKUP = ('md', 'ipynb')
 PLUGIN_PATH = './plugins'
 PLUGINS = ['ipynb.markup']
 
-THEME = "/home/karan/pelican-themes/alchemy"
+#THEME = "/home/karan/pelican-themes/"
+THEME = "aboutwilson"
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 
