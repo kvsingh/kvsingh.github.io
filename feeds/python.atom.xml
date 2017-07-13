@@ -1,33 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-        <meta charset="utf-8" />
-        <title>Inhibited Zombies - facebook api</title>
-        <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/main.css" />
-        <link href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Inhibited Zombies Atom Feed" />
-
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://kvsingh.github.io/">Inhibited Zombies </a></h1>
-                <nav><ul>
-                    <li><a href="https://kvsingh.github.io/category/posts.html">posts</a></li>
-                    <li><a href="https://kvsingh.github.io/category/python.html">Python</a></li>
-                </ul>
-                </nav>
-        </header><!-- /#banner -->
-
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://kvsingh.github.io/facebook-posts-through-years.html">Analyzing my facebook posts through the years</a></h1>
-<footer class="post-info">
-        <span>Mon 12 July 2010</span>
-<span>| tags: <a href="https://kvsingh.github.io/tag/data-analysis.html">data-analysis</a><a href="https://kvsingh.github.io/tag/facebook-api.html">facebook api</a></span>
-</footer><!-- /.post-info --><style type="text/css">/*!
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Inhibited Zombies - Python</title><link href="https://kvsingh.github.io/" rel="alternate"></link><link href="https://kvsingh.github.io/feeds/python.atom.xml" rel="self"></link><id>https://kvsingh.github.io/</id><updated>2010-12-05T19:30:00+05:30</updated><entry><title>Analyzing my facebook posts through the years</title><link href="https://kvsingh.github.io/facebook-posts-through-years.html" rel="alternate"></link><published>2010-07-12T23:59:00+05:30</published><updated>2010-12-05T19:30:00+05:30</updated><author><name>Karanveer Singh</name></author><id>tag:kvsingh.github.io,2010-07-12:/facebook-posts-through-years.html</id><summary type="html">
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;
+&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;I want to tell a small story regarding this post.&lt;/p&gt;
+&lt;p&gt;For a long time, I wanted to do some sort of "le data analysis". My fingers were always itching to hit the keyboard, but anyone who knows me, knows I'm not an "idea guy". That is because whenever I try to use the right part of my brain (the &lt;a href="http://brainmadesimple.com/left-and-right-hemispheres.html"&gt;part of brain&lt;/a&gt;</summary><content type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -254,7 +233,7 @@ div.unrecognized_cell .inner_cell a:hover {
   text-decoration: none;
 }
 @media (max-width: 540px) {
-  div.unrecognized_cell > div.prompt {
+  div.unrecognized_cell &gt; div.prompt {
     display: none;
   }
 }
@@ -307,19 +286,19 @@ div.input_prompt {
   color: #303F9F;
   border-top: 1px solid transparent;
 }
-div.input_area > div.highlight {
+div.input_area &gt; div.highlight {
   margin: 0.4em;
   border: none;
   padding: 0px;
   background-color: transparent;
 }
-div.input_area > div.highlight > pre {
+div.input_area &gt; div.highlight &gt; pre {
   margin: 0px;
   border: none;
   padding: 0px;
   background-color: transparent;
 }
-/* The following gets added to the <head> if it is detected that the user has a
+/* The following gets added to the &lt;head&gt; if it is detected that the user has a
  * monospace font with inconsistent normal/bold/italic height.  See
  * notebookmain.js.  Such fonts will have keywords vertically offset with
  * respect to the rest of the text.  The user should select a better font.
@@ -365,7 +344,7 @@ div.input_area > div.highlight > pre {
 }
 /*
 
-Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Original style from softwaremaniacs.org (c) Ivan Sagalaev &lt;Maniac@SoftwareManiacs.Org&gt;
 Adapted from GitHub theme
 
 */
@@ -827,7 +806,7 @@ div.text_cell {
   align-items: stretch;
 }
 @media (max-width: 540px) {
-  div.text_cell > div.prompt {
+  div.text_cell &gt; div.prompt {
     display: none;
   }
 }
@@ -892,8 +871,8 @@ h6:hover .anchor-link {
   font-size: 100%;
   font-style: italic;
 }
-</style>
-<style type="text/css">.highlight .hll { background-color: #ffffcc }
+&lt;/style&gt;
+&lt;style type="text/css"&gt;.highlight .hll { background-color: #ffffcc }
 .highlight  { background: #f8f8f8; }
 .highlight .c { color: #408080; font-style: italic } /* Comment */
 .highlight .err { border: 1px solid #FF0000 } /* Error */
@@ -961,8 +940,8 @@ h6:hover .anchor-link {
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
-.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
-<style type="text/css">
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */&lt;/style&gt;
+&lt;style type="text/css"&gt;
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
 .ansi-black-fg { color: #3E424D; }
 .ansi-black-bg { background-color: #3E424D; }
@@ -998,91 +977,91 @@ h6:hover .anchor-link {
 .ansi-white-intense-bg { background-color: #A1A6B2; }
 
 .ansi-bold { font-weight: bold; }
-</style>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I want to tell a small story regarding this post.</p>
-<p>For a long time, I wanted to do some sort of "le data analysis". My fingers were always itching to hit the keyboard, but anyone who knows me, knows I'm not an "idea guy". That is because whenever I try to use the right part of my brain (the <a href="http://brainmadesimple.com/left-and-right-hemispheres.html">part of brain</a> associated with creativity and the arts), I go into an analysis paralysis phase. I end up trying to solve "creative" problems in the same way that I use for solving "logical" problems. Anyway, I'm getting better at this.</p>
-<p>I racked my brain, trying to come up with an "idea". The problem was, that I was looking for something perfect, and too lazy to start the work without knowing that it will have the expected outcome (of gaining an audience and recognition). A wise co worker once told me that once you start working on something, ideas are bound to arise, based on whatever you have done. It all seemed to make sense, but its only recenyly that my mind has been able to fully accept this concept.</p>
-<p>I was pretty sure I wanted to do something with the FB API. I feel that understanding human behaviour is one of the most interesting aspects of data analytics/science. Seeing the behaviour of a person in real life, then quantifying it and seeing the same behaviour in mathematical equations and graphs, well, there's just something orgasmic about that (I use a lot of sex related metaphors to describe programming/maths/music/scenic places, you might want to get used to that if you'll be reading my blog).</p>
-<p>So, after months and months of "thinking my brain cells away", I finally have a shitty story to tell.</p>
-<p>Ok, this one starts off by making a word cloud of all my status messages. Yes, all 702 of them, starting off with sometime in 2007 or so.</p>
-<p>For the tech savvy folks, here's a little bit of juice on how to set this up yourself:</p>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In [ ]:</div>
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span>
-<span class="kn">import</span> <span class="nn">facebook</span>
+&lt;/style&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;
+&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;I want to tell a small story regarding this post.&lt;/p&gt;
+&lt;p&gt;For a long time, I wanted to do some sort of "le data analysis". My fingers were always itching to hit the keyboard, but anyone who knows me, knows I'm not an "idea guy". That is because whenever I try to use the right part of my brain (the &lt;a href="http://brainmadesimple.com/left-and-right-hemispheres.html"&gt;part of brain&lt;/a&gt; associated with creativity and the arts), I go into an analysis paralysis phase. I end up trying to solve "creative" problems in the same way that I use for solving "logical" problems. Anyway, I'm getting better at this.&lt;/p&gt;
+&lt;p&gt;I racked my brain, trying to come up with an "idea". The problem was, that I was looking for something perfect, and too lazy to start the work without knowing that it will have the expected outcome (of gaining an audience and recognition). A wise co worker once told me that once you start working on something, ideas are bound to arise, based on whatever you have done. It all seemed to make sense, but its only recenyly that my mind has been able to fully accept this concept.&lt;/p&gt;
+&lt;p&gt;I was pretty sure I wanted to do something with the FB API. I feel that understanding human behaviour is one of the most interesting aspects of data analytics/science. Seeing the behaviour of a person in real life, then quantifying it and seeing the same behaviour in mathematical equations and graphs, well, there's just something orgasmic about that (I use a lot of sex related metaphors to describe programming/maths/music/scenic places, you might want to get used to that if you'll be reading my blog).&lt;/p&gt;
+&lt;p&gt;So, after months and months of "thinking my brain cells away", I finally have a shitty story to tell.&lt;/p&gt;
+&lt;p&gt;Ok, this one starts off by making a word cloud of all my status messages. Yes, all 702 of them, starting off with sometime in 2007 or so.&lt;/p&gt;
+&lt;p&gt;For the tech savvy folks, here's a little bit of juice on how to set this up yourself:&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;wordcloud&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;WordCloud&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;facebook&lt;/span&gt;
 
-<span class="n">graph</span> <span class="o">=</span> <span class="n">facebook</span><span class="o">.</span><span class="n">GraphAPI</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="s1">'EAACEdEose0cBAGu0ObAWVaP7n6Qso2ckZCPvWtLvawZCKGdigz3tgvP0rtZCWpYwDaZAClnKVEjR1VMezaQvRVALIdCrZAkVKkmiVCYGX9go1ltqLUcgltvuzmBnk7YjmAkOh2lItfBO1ZB4134AaflP0uekMlNTbjhkNASq0ffD8TjVhS1q2n9vEUft6DYysZD'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">'2.8'</span><span class="p">)</span>
-<span class="n">posts</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'me'</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s1">'posts'</span><span class="p">)</span>
+&lt;span class="n"&gt;graph&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;facebook&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GraphAPI&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;access_token&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'EAACEdEose0cBAGu0ObAWVaP7n6Qso2ckZCPvWtLvawZCKGdigz3tgvP0rtZCWpYwDaZAClnKVEjR1VMezaQvRVALIdCrZAkVKkmiVCYGX9go1ltqLUcgltvuzmBnk7YjmAkOh2lItfBO1ZB4134AaflP0uekMlNTbjhkNASq0ffD8TjVhS1q2n9vEUft6DYysZD'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'2.8'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;posts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;graph&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_all_connections&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'me'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;connection_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'posts'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-<span class="n">all_status_text</span> <span class="o">=</span> <span class="s1">''</span>
+&lt;span class="n"&gt;all_status_text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;''&lt;/span&gt;
 
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">:</span>
-    <span class="n">post_id</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span>
-    <span class="c1">#get the text of the post</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'message'</span><span class="p">]</span>
-        <span class="n">all_status_text</span> <span class="o">+=</span> <span class="p">(</span><span class="n">status</span> <span class="o">+</span> <span class="s2">" "</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">continue</span>
+&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;posts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;post_id&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'id'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="c1"&gt;#get the text of the post&lt;/span&gt;
+    &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;status&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'message'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="n"&gt;all_status_text&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;status&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;" "&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;except&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;continue&lt;/span&gt;
 
-    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="k">print</span> <span class="n">i</span>
+    &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
 
-<span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">()</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">all_status_text</span><span class="p">)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">wordcloud</span><span class="o">.</span><span class="n">to_image</span><span class="p">()</span>
-<span class="n">image</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In [ ]:</div>
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In [ ]:</div>
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In [ ]:</div>
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
+&lt;span class="n"&gt;wordcloud&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;WordCloud&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;generate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;all_status_text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;image&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;wordcloud&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_image&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;image&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
@@ -1109,38 +1088,5 @@ h6:hover .anchor-link {
         "}); ";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script>
-                </article>
-<p class="paginator">
-    Page 1 / 1
-</p>
-            </aside><!-- /#featured -->
-            </ol><!-- /#posts-list -->
-            </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                            <li><a href="#">You can modify those links in your config file</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
-
-                            <li><a href="#">You can add links in your config file</a></li>
-                            <li><a href="#">Another social link</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
-        </footer><!-- /#contentinfo -->
-
-</body>
-</html>
+&lt;/script&gt;
+</content><category term="data-analysis"></category><category term="facebook api"></category></entry></feed>
