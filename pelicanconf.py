@@ -39,7 +39,8 @@ PLUGINS = ['ipynb.markup']
 
 #THEME = "/home/karan/pelican-themes/"
 #THEME = "aboutwilson"
-THEME = "blueidea"
+#THEME = "blueidea"
+THEME = "bulrush"
 #THEME = "iris"
 
 IGNORE_FILES = ['.ipynb_checkpoints']
