@@ -38,12 +38,13 @@ PLUGIN_PATH = './plugins'
 PLUGINS = ['ipynb.markup']
 
 #THEME = "/home/karan/pelican-themes/"
-#THEME = "aboutwilson"
+THEME = "aboutwilson"
 #THEME = "blueidea"
-THEME = "bulrush"
+#THEME = "bulrush"
 #THEME = "iris"
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
+LOAD_CONTENT_CACHE = False
