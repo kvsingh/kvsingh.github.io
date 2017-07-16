@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Karanveer Singh'
 SITENAME = u'Inhibited Zombies'
-SITEURL = 'https://kvsingh.github.io'
+#SITEURL = 'https://kvsingh.github.io'
 
 
 PATH = 'content'
@@ -38,10 +38,14 @@ PLUGIN_PATH = './plugins'
 PLUGINS = ['ipynb.markup']
 
 #THEME = "/home/karan/pelican-themes/"
-THEME = "aboutwilson"
 #THEME = "blueidea"
 #THEME = "bulrush"
 #THEME = "iris"
+
+#THEME = "aboutwilson"
+#THEME = "Flex"
+#THEME = "nikhil-theme"
+THEME = "tuxlite_tbs"
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 
