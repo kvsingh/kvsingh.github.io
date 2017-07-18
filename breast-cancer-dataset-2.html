@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+    <title>Inhibited Zombies | Playing around with the breast cancer dataset</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="/theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="/theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
+
+    <meta name="keywords" content="python scikit-learn pandas" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="">Home</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href="">Inhibited Zombies</a></h1>
+        </div>
+    </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">Jul 11, 2017</h4>
+
+            <article class="post">
+                <h2 class="title">
+                    <a href="/breast-cancer-dataset-2.html" rel="bookmark" title="Permanent Link to &quot;Playing around with the breast cancer dataset&quot;">Playing around with the breast cancer dataset</a>
+                </h2>
+
+                <p>The <a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)">Breast Cancer Dataset</a> is a dataset of features computed from breast mass of 569 patients. It contains 30 attributes of patients - and a class label telling whether their tumour is malignant or benign. There are a total of 357 benign objects and 212 malignant objects. I decided to use this dataset for my first blog post on machine learning, since its a very straightforward dataset with no missing values and all variables being real valued (no categorical variables). This blog post will help people new to the whole scikit-learn and machine learning world.</p>
+<p>The scope of this blog post is to get started with using the packages : pandas and scikit-learning, and getting familiar with the general flow of solving a data related machine learning problem. We want to broadly go through the various steps (importing the data, cleaning the data, preprocessing, building models and optimizing them) without going too much in depth with each step.</p>
+<p>We start by loading our packages, importing the dataset and mapping 'B' and 'M' class labels to integers, and separating the attributes and class labels.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="kp">nan</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">cross_val_score</span><span class="p">,</span> <span class="n">cross_val_predict</span><span class="p">,</span> <span class="n">validation_curve</span>
+<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;breast-cancer-wisconsin.data.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s1">&#39;B&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">x</span><span class="o">.</span><span class="kp">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="kp">shape</span>
+</pre></div>
+                <div class="clear"></div>
+
+                <div class="info">
+                    <a href="/breast-cancer-dataset-2.html">posted at 21:00</a>
+                    &nbsp;&middot;&nbsp;<a href="/category/machine-learning.html" rel="tag">machine-learning</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="/tag/python-scikit-learn-pandas.html" class="tags">python scikit-learn pandas</a>
+                </div>
+            </article>
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
+</body>
+</html>
