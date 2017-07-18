@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 AUTHOR = u'Karanveer Singh'
 SITENAME = u'Inhibited Zombies'
 #SITEURL = 'https://kvsingh.github.io'
-
+SITETITLE = 'Inhibited Zombies'
 
 PATH = 'content'
 
@@ -19,6 +19,8 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
+
+DISQUS_SITENAME = "inzombies.disqus.com"
 
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
@@ -43,12 +45,22 @@ PLUGINS = ['ipynb.markup']
 #THEME = "iris"
 
 #THEME = "aboutwilson"
-#THEME = "Flex"
 #THEME = "nikhil-theme"
-THEME = "tuxlite_tbs"
+#THEME = "tuxlite_tbs"
+#THEME = "alchemy"
+
+#THEME = "Flex"
+THEME = "pure-single"
+
+SOCIAL = (
+        ('github', 'https://github.com/kvsingh/'),
+        ('facebook', 'https://www.facebook.com/karanveer.singh1'),
+    )
+
+#PYGMENTS = 'emacs'
 
 IGNORE_FILES = ['.ipynb_checkpoints']
-
+IPYNB_IGNORE_CSS=True
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
 LOAD_CONTENT_CACHE = False
