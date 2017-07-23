@@ -20,7 +20,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-DISQUS_SITENAME = "inzombies.disqus.com"
+DISQUS_SITENAME = "inzombies"
 
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
