@@ -32,6 +32,8 @@ LINKS = (('Pelican', 'http://getpelican.com/'),
 SOCIAL = (('You can add links in your config file', '#'),
           ('Another social link', '#'),)
 
+GOOGLE_ANALYTICS = "UA-41437726-1"
+
 DEFAULT_PAGINATION = 5
 
 MARKUP = ('md', 'ipynb')
@@ -55,6 +57,8 @@ THEME = "pure-single"
 SOCIAL = (
         ('github', 'https://github.com/kvsingh/'),
         ('facebook', 'https://www.facebook.com/karanveer.singh1'),
+        ('soundcloud', 'https://soundcloud.com/karanveer-singh-16'),
+        ('linkedin' ,  'https://www.linkedin.com/in/karanveersingh/')
     )
 
 #PYGMENTS = 'emacs'
