@@ -3,9 +3,9 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Karanveer Singh'
-SITENAME = u'Inhibited Zombies'
+SITENAME = u'UnInhibited Zombie'
 #SITEURL = 'https://kvsingh.github.io'
-SITETITLE = 'Inhibited Zombies'
+SITETITLE = 'UnInhibited Zombie'
 
 PATH = 'content'
 
