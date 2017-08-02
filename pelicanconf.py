@@ -56,7 +56,7 @@ THEME = "pure-single"
 
 SOCIAL = (
         ('github', 'https://github.com/kvsingh/'),
-        ('soundcloud', 'https://soundcloud.com/karanveer-singh-16')       
+        ('soundcloud', 'https://soundcloud.com/unzombie')       
     )
 
 #PYGMENTS = 'emacs'
