@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UnInhibited Zombie, ">
+
+
+        <title>Analyzing my Facebook posts through the years // UnInhibited Zombie // </title>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pure.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="https://kvsingh.github.io">UnInhibited Zombie</a></h1>
+                            <p class="tagline"></p>
+                                <p class="social">
+                                    <a href="https://github.com/kvsingh/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.facebook.com/karanveer.singh1">
+                                        <i class="fa fa-facebook fa-3x"></i>
+                                    </a>
+                                    <a href="https://soundcloud.com/karanveer-singh-16">
+                                        <i class="fa fa-soundcloud fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/karanveersingh/">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                </p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Analyzing my Facebook posts through the years</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/data-analysis.html">data-analysis</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/facebook.html">facebook</a>
+                        </p>
+                </header>
+            </section>
+            
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For the longest time, I've been wanting to do some analysis using facebook graph API. One of the domains which really excites me, in terms of analysing data and deriving conclusions from it, is studying data related to human behaviour. And what better source of such information do we have other than facebook?  I mean, it has more than <a href="https://en.wikipedia.org/wiki/List_of_virtual_communities_with_more_than_100_million_active_users">2 billion monthly active users</a>. It is a cesspool of narcissicm where people share their important moments.</p>
+<p>I can definitely acknowledge that the dopamine rush which facebook provides is a bit "dangerous", its almost like a drug, and is prone to addiction like any other feel good activity. But when used in moderation, it provides benefits like any other drugs - a place to express yourself and share stories in a world which is becoming less social by the minute.</p>
+<p>However, this raises the important question of privacy, and facebook has recognized the importance of that by modifying its API over the years. While earlier it was easy to access users' public information by using the API, now it requires the user to authenticate before you can access even the public information. Unfortunately, that makes it difficult for people like me who are looking to use other people's data to derive generalized insights. So, until I'm able to convince a considerable number of people to give their precious data, I decided to work on what I had - my own data. I decided to analyze my posts over the years to see if I could find some patterns.</p>
+<p>To start with, we try to answer the question : what are the features which describe a facebook post? I came up with the following answers:</p>
+<ul>
+<li>Number of likes</li>
+<li>Length of the post</li>
+<li>Time of the post (Month, Day of week, Time of day)</li>
+<li>Content of the post </li>
+</ul>
+<p>Next, use facebook's graph API to get the above data, and write it to a csv file. If you want to do this for your own facebook statuses, you'll need an FB API user access token (I generated mine via the <a href="https://developers.facebook.com/tools/explorer/145634995501895/">Graph API Explorer</a>). You'll also need a <a href="https://developers.facebook.com/">Facebook developer account</a> for this.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">facebook</span><span class="o">,</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'data-statuses.csv'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">))</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">'polarity'</span><span class="p">,</span> <span class="s1">'subjectivity'</span><span class="p">,</span> <span class="s1">'num_reactions'</span><span class="p">,</span> <span class="s1">'length'</span><span class="p">,</span> <span class="s1">'num_words'</span><span class="p">,</span> <span class="s1">'month'</span><span class="p">,</span> <span class="s1">'dow'</span><span class="p">,</span> <span class="s1">'tod'</span><span class="p">])</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">facebook</span><span class="o">.</span><span class="n">GraphAPI</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="s1">'youraccesstoken'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">'2.8'</span><span class="p">)</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'me'</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s1">'posts'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">post_id</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'message'</span><span class="p">]</span>
+
+        <span class="n">time_string</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'created_time'</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">time_string</span><span class="p">,</span> <span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S'</span><span class="p">)</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'time'</span><span class="p">]</span>
+
+        <span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="n">polarity</span><span class="p">,</span> <span class="n">subjectivity</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">sentiment</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+        <span class="n">num_words</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">))</span>
+        <span class="n">post_reactions</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post_id</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s2">"reactions"</span><span class="p">)</span>
+        <span class="n">num_reactions</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">post_reactions</span><span class="p">)</span>
+
+        <span class="n">month</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">month</span>
+        <span class="n">dow</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+        <span class="n">tod</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">hour</span>
+
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">polarity</span><span class="p">,</span> <span class="n">subjectivity</span><span class="p">,</span> <span class="n">num_reactions</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">num_words</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">dow</span><span class="p">,</span> <span class="n">tod</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">continue</span>
+</pre></div>
+<p>Now, lets start the analysis. We use pandas to load the data in the csv file to a dataframe.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [2]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'data-statuses.csv'</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>   polarity  subjectivity  num_reactions  length  num_words  month  dow  tod
+0  0.125000      0.458333             18     312         59      7    4   20
+1 -0.245833      0.320833              1     107         18      7    3   19
+2 -0.400000      0.400000             50      56          7      7    3   12
+3  0.000000      0.000000              0       6          1      6    6   16
+4  0.000000      0.000000              3       1          1      6    0   18
+(703, 8)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Karanveer Singh &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-41437726-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>

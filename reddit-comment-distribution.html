@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UnInhibited Zombie, ">
+
+
+        <title>Analyzing the relationship between reddit comment distribution and subreddits // UnInhibited Zombie // </title>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/theme/css/pure.css">
+    <link rel="stylesheet" href="/theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="">UnInhibited Zombie</a></h1>
+                            <p class="tagline"></p>
+                                <p class="social">
+                                    <a href="https://github.com/kvsingh/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.facebook.com/karanveer.singh1">
+                                        <i class="fa fa-facebook fa-3x"></i>
+                                    </a>
+                                    <a href="https://soundcloud.com/karanveer-singh-16">
+                                        <i class="fa fa-soundcloud fa-3x"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/karanveersingh/">
+                                        <i class="fa fa-linkedin fa-3x"></i>
+                                    </a>
+                                </p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Analyzing the relationship between reddit comment distribution and subreddits</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="/tag/python.html">python</a>
+                                <a class="post-category" href="/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="/tag/data-analysis.html">data-analysis</a>
+                                <a class="post-category" href="/tag/reddit.html">reddit</a>
+                        </p>
+                </header>
+            </section>
+            
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="reddit.com">Reddit</a> is one of the discussion websites which I visit frequently. Its a forum based website, where users can post links or text posts which can be downvoted and upvoted. One of the brilliant things about reddit is the comments - the actual "discussion" part of reddit. These can also be upvoted and downvoted. Topics are divided among "subreddits", you can submit a post to a particular subreddit, for example, a soccer based post can go to the /r/soccer subreddit, news based post to /r/news, and so on.</p>
+<p>In this blog post, I try to analyze the distribution of point counts of comments in the "top" subreddits and see if they have a relationship with the particular subreddit. I did take a course of stats in college, but most of that is a bit fuzzy in my head. Hence I had to end up googling a lot of things, which lead to a lot of 'reverse learning" - where you end up learning concepts just by working on problems, and "needing" to use those concepts while working. This might sound like gibberish, but it'll get a bit more clearer as you progress down the post.</p>
+<h2 id="Getting-the-data">Getting the data<a class="anchor-link" href="#Getting-the-data">¶</a></h2><p>To start with, I'll be getting comments distribution data for the top 1000 posts over the past year. The attributes of the post I'm interested in, are :</p>
+<ul>
+<li>Comments distribution</li>
+<li>Subreddit of the post</li>
+<li>Submission ID (So that we can get back more information of the submission if needed)</li>
+<li>score (Might be useful)</li>
+<li>Number of comments</li>
+</ul>
+<p><a href="https://github.com/kvsingh/reddit-scripts/blob/master/reddit-comments-top-subreddits.py">Here</a> is a github link for the code to get this data, for anyone who's interested.</p>
+<h2 id="Subreddit-breakdown">Subreddit breakdown<a class="anchor-link" href="#Subreddit-breakdown">¶</a></h2><p>Lets start by looking at the subreddits which these posts belong to, and the frequency of each subreddit.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [60]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'reddit-top-1000-post-comments-distr.csv'</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'subreddit'</span><span class="p">,</span> <span class="s1">'num_subs'</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>subreddit            num_subs
+r/pics               17341453    283
+r/funny              17711708    190
+r/gifs               14865217    154
+r/aww                15740709     97
+r/gaming             16688421     49
+r/worldnews          17365378     39
+r/todayilearned      17502144     29
+r/videos             16606967     23
+r/news               14838769     21
+r/mildlyinteresting  12982562     19
+dtype: int64
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>/r/pics, /r/funny, /r/gifs, /r/aww, anyone who uses reddit even a decent bit will tell you its no surprise that these subreddits occupy the top spots in the "top" posts. Lets look at the tail.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [61]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'subreddit'</span><span class="p">,</span> <span class="s1">'num_subs'</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>subreddit              num_subs
+r/SandersForPresident  213436      1
+r/InternetIsBeautiful  12351784    1
+r/KendrickLamar        56404       1
+r/LateStageCapitalism  163334      1
+r/LifeProTips          13112055    1
+r/woahdude             1296893     1
+r/UpliftingNews        12117045    1
+r/OldSchoolCool        11980329    1
+r/PrequelMemes         280343      1
+r/nottheonion          12311419    1
+dtype: int64
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Redditors might be familiar with some of these, /r/nottheonion, /r/woahdude, /r/LifeProTips, but more or less, these are less popular subreddits.</p>
+<h2 id="Data-filtering">Data filtering<a class="anchor-link" href="#Data-filtering">¶</a></h2><p>Lets filter out some of the submission which are from subreddits which have a very low count of submissions in the top 1000. The rationale being, to figure out the general relationship of comments in a subreddit, it makes sense to look at those subreddits which have a considerable number of posts. Looking at a single post from a subreddit hardly makes any sense.</p>
+<p>I decided to filter out and keep only those subreddits which have more than 10 posts in the top 1000.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [62]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"subreddit"</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">></span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Analyzing-comment-vote-count-distributions">Analyzing comment vote count distributions<a class="anchor-link" href="#Analyzing-comment-vote-count-distributions">¶</a></h2><h3 id="Mean-and-variance">Mean and variance<a class="anchor-link" href="#Mean-and-variance">¶</a></h3><p>To start with, mean and standard deviation (or variance) are the most obvious things to look at when analyzing a distribution. So we create a couple of more columns in our pandas dataframe denoting the mean and standard deviation of each comment vote count distribution.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [63]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>  
+<span class="n">df</span><span class="p">[</span><span class="s1">'means'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'std'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now lets look at the mean and standard deviation for 2 subreddits and compare them. Lets look at /r/news and /r/pics.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [64]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'subreddit'</span><span class="p">]</span><span class="o">==</span><span class="s1">'r/news'</span><span class="p">][[</span><span class="s1">'means'</span><span class="p">,</span> <span class="s1">'std'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'subreddit'</span><span class="p">]</span><span class="o">==</span><span class="s1">'r/pics'</span><span class="p">][[</span><span class="s1">'means'</span><span class="p">,</span> <span class="s1">'std'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>           means          std
+83    707.744000  1940.516254
+87    571.812000  1553.848302
+142  1020.303213  2800.076360
+208   564.312625  1860.300583
+229   737.817269  2064.548227
+        means          std
+2  382.449597  1586.172387
+3  334.892929  1204.248983
+4  327.652000  1442.347723
+6  841.641283  4297.797784
+9  172.792683  1003.191137
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notice anything peculiar? The standard deviation for r/pics posts seems to be at a much higher proportion of the mean compared to that of r/news. Could this ... mean anything? (Sorry, the pun was there for the taking).</p>
+<h3 id="Coefficient-of-variation">Coefficient of variation<a class="anchor-link" href="#Coefficient-of-variation">¶</a></h3><p>This is when I had to start googling things. So, apparently, there is a thing called <a href="https://en.wikipedia.org/wiki/Coefficient_of_variation">coefficient of variation</a>, which is essentially just standard deviation divided by the mean. This can be (and is) used to compare vastly different distributions. By this, I mean distributions which vary a lot in their range of values, and have different means. As a result, just looking at the standard deviation won't help, and sd needs to be looked at in context of the mean.</p>
+<p>Lets add another column to our dataframe, called 'cv', and lets see what average cv value we are getting for each subreddit. To give some more context, I have also added the number of posts of that subreddit which were used to calculate the cv (This gives a measure of how much we can actually rely on the measurement)</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [66]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'cv'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'std'</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">'means'</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'subreddit'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'cv'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="s1">'subreddit'</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">})</span>
+<span class="n">a</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'cv'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[66]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>cv</th>
+<th>subreddit</th>
+</tr>
+<tr>
+<th>subreddit</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>r/news</th>
+<td>379.546131</td>
+<td>21</td>
+</tr>
+<tr>
+<th>r/worldnews</th>
+<td>424.816224</td>
+<td>39</td>
+</tr>
+<tr>
+<th>r/videos</th>
+<td>432.978313</td>
+<td>23</td>
+</tr>
+<tr>
+<th>r/todayilearned</th>
+<td>472.853732</td>
+<td>29</td>
+</tr>
+<tr>
+<th>r/pics</th>
+<td>524.877848</td>
+<td>283</td>
+</tr>
+<tr>
+<th>r/gaming</th>
+<td>539.814921</td>
+<td>49</td>
+</tr>
+<tr>
+<th>r/gifs</th>
+<td>550.343261</td>
+<td>154</td>
+</tr>
+<tr>
+<th>r/funny</th>
+<td>557.847733</td>
+<td>190</td>
+</tr>
+<tr>
+<th>r/aww</th>
+<td>578.707574</td>
+<td>97</td>
+</tr>
+<tr>
+<th>r/mildlyinteresting</th>
+<td>595.103589</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Going farther down the list, the subreddits are getting more and more "non serious". The top half contains more "serious" subreddits (like, /r/news, /r/worldnews, /r/videos, /r/todayilearned), and as you go down, you see more and more "funny non serious" subreddits like /r/pics, /r/funny, /r/aww.</p>
+<p>Now, technically speaking, coefficient of variation (CV from now on) only makes sense for datasets measured on "ratio scale". According to the wikipedia page:</p>
+<blockquote><p>The coefficient of variation should be computed only for data measured on a ratio scale, as these are the measurements that can only take non-negative values. The coefficient of variation may not have any meaning for data on an interval scale.</p>
+</blockquote>
+<p>The comment vote count distribution, is, technically not a ratio scale, since comments can have negative values. Hence , even though using CV as a metric to measure relative dispersion of distributions gives us some intuitive meaning, it is technically not a correct way to do things (As in it won't have any weight in a research paper). Therefore, I decided to probe a little farther and look at other metrics for measuring dispersion.</p>
+<h3 id="Other-metrics">Other metrics<a class="anchor-link" href="#Other-metrics">¶</a></h3><p>Other metrics I ended up using are :</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Mean_absolute_difference#Relative_mean_absolute_difference">Relative mean absolute difference (RMD)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Quartile_coefficient_of_dispersion">Quartile coefficient of dispersion</a></li>
+</ul>
+<p>These are metrics for measuring relative dispersion, which are defined on any kind of distribution, not just distributions from ratio scales. Quick introduction to both of them:</p>
+<p>RMD is essentially MD divided by the mean, where MD is defined as the average absolute difference between two values in the distribution. Quartile coefficient of dispersion is :</p>
+<blockquote><p>(Q3 - Q1)/(Q3 + Q1)</p>
+</blockquote>
+<p>where Q3 and Q4 are the first and third quartiles of the dataset.</p>
+<p>Lets add 2 more columns for these 2 metrics:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [67]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">md</span><span class="p">(</span><span class="n">distr</span><span class="p">):</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">distr</span><span class="p">)</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+            <span class="n">md</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">distr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">distr</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">md</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="o">*</span><span class="n">l</span><span class="p">)</span>
+    
+<span class="n">df</span><span class="p">[</span><span class="s1">'rmd'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">md</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [68]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'subreddit'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'rmd'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="s1">'subreddit'</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">})</span>
+<span class="n">a</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'rmd'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[68]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>rmd</th>
+<th>subreddit</th>
+</tr>
+<tr>
+<th>subreddit</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>r/news</th>
+<td>1.665441</td>
+<td>21</td>
+</tr>
+<tr>
+<th>r/worldnews</th>
+<td>1.686927</td>
+<td>39</td>
+</tr>
+<tr>
+<th>r/todayilearned</th>
+<td>1.715621</td>
+<td>29</td>
+</tr>
+<tr>
+<th>r/videos</th>
+<td>1.726403</td>
+<td>23</td>
+</tr>
+<tr>
+<th>r/pics</th>
+<td>1.754518</td>
+<td>283</td>
+</tr>
+<tr>
+<th>r/gaming</th>
+<td>1.771316</td>
+<td>49</td>
+</tr>
+<tr>
+<th>r/funny</th>
+<td>1.780747</td>
+<td>190</td>
+</tr>
+<tr>
+<th>r/gifs</th>
+<td>1.787021</td>
+<td>154</td>
+</tr>
+<tr>
+<th>r/aww</th>
+<td>1.790862</td>
+<td>97</td>
+</tr>
+<tr>
+<th>r/mildlyinteresting</th>
+<td>1.801693</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [80]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">qdisp</span><span class="p">(</span><span class="n">distr</span><span class="p">):</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">distr</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">q3</span> <span class="o">=</span> <span class="n">distr</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>    
+    <span class="k">return</span> <span class="p">((</span><span class="n">q3</span><span class="o">-</span><span class="n">q1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">q3</span><span class="o">+</span><span class="n">q1</span><span class="p">))</span><span class="o">/</span><span class="n">distr</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">'q'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">qdisp</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [81]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'subreddit'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'q'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="s1">'subreddit'</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">})</span>
+<span class="n">a</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'q'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[81]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>q</th>
+<th>subreddit</th>
+</tr>
+<tr>
+<th>subreddit</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>r/news</th>
+<td>0.003526</td>
+<td>21</td>
+</tr>
+<tr>
+<th>r/videos</th>
+<td>0.003571</td>
+<td>23</td>
+</tr>
+<tr>
+<th>r/worldnews</th>
+<td>0.004361</td>
+<td>39</td>
+</tr>
+<tr>
+<th>r/todayilearned</th>
+<td>0.004971</td>
+<td>29</td>
+</tr>
+<tr>
+<th>r/gifs</th>
+<td>0.006665</td>
+<td>154</td>
+</tr>
+<tr>
+<th>r/gaming</th>
+<td>0.007348</td>
+<td>49</td>
+</tr>
+<tr>
+<th>r/mildlyinteresting</th>
+<td>0.007814</td>
+<td>19</td>
+</tr>
+<tr>
+<th>r/pics</th>
+<td>0.008686</td>
+<td>283</td>
+</tr>
+<tr>
+<th>r/funny</th>
+<td>0.008781</td>
+<td>190</td>
+</tr>
+<tr>
+<th>r/aww</th>
+<td>0.011370</td>
+<td>97</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [86]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">qdisp2</span><span class="p">(</span><span class="n">distr</span><span class="p">):</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">distr</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">distr2</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">distr</span><span class="o">-</span><span class="n">q1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distr2</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">/</span><span class="n">q1</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">'madm'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'comment_points'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">qdisp2</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [87]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'subreddit'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'madm'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="s1">'subreddit'</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">})</span>
+<span class="n">a</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'madm'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt output_prompt">Out[87]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>madm</th>
+<th>subreddit</th>
+</tr>
+<tr>
+<th>subreddit</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>r/aww</th>
+<td>0.622005</td>
+<td>97</td>
+</tr>
+<tr>
+<th>r/funny</th>
+<td>0.643618</td>
+<td>190</td>
+</tr>
+<tr>
+<th>r/mildlyinteresting</th>
+<td>0.668524</td>
+<td>19</td>
+</tr>
+<tr>
+<th>r/gaming</th>
+<td>0.682346</td>
+<td>49</td>
+</tr>
+<tr>
+<th>r/gifs</th>
+<td>0.688722</td>
+<td>154</td>
+</tr>
+<tr>
+<th>r/pics</th>
+<td>0.689940</td>
+<td>283</td>
+</tr>
+<tr>
+<th>r/todayilearned</th>
+<td>0.758409</td>
+<td>29</td>
+</tr>
+<tr>
+<th>r/videos</th>
+<td>0.764469</td>
+<td>23</td>
+</tr>
+<tr>
+<th>r/worldnews</th>
+<td>0.792697</td>
+<td>39</td>
+</tr>
+<tr>
+<th>r/news</th>
+<td>0.805250</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Karanveer Singh &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-41437726-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>
