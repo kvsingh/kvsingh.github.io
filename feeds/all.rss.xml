@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel><title>UnInhibited Zombie</title><link>https://kvsingh.github.io/</link><description></description><lastBuildDate>Mon, 31 Jul 2017 21:00:00 +0530</lastBuildDate><item><title>Football subreddit word clouds - Visualizing transfer window madness</title><link>https://kvsingh.github.io/soccer-subreddit-wordcloud.html</link><description>
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;
+&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;&lt;a href="reddit.com"&gt;Reddit&lt;/a&gt; is one of my favourite discussion websites. It is a forum where people can post links or text posts which are downvoted and upvoted by users. "Subreddits" are communities based on a certain topic - like business, news, sports. Being a big football fan, I frequently visit the football-related subreddits. If you've been following European football at all, you'll know that even though the transfer window is not yet over, the past month or so has been crazy in terms of transfer news.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Karanveer Singh</dc:creator><pubDate>Mon, 31 Jul 2017 21:00:00 +0530</pubDate><guid isPermaLink="false">tag:kvsingh.github.io,2017-07-31:/soccer-subreddit-wordcloud.html</guid><category>python</category><category>data-visualization</category><category>reddit</category></item><item><title>Playing around with the breast cancer dataset</title><link>https://kvsingh.github.io/breast-cancer-dataset.html</link><description>
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;
+&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;The &lt;a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29"&gt;Breast Cancer Dataset&lt;/a&gt; is a dataset of features computed from breast mass of candidate patients. Each instance of features corresponds to a malignant or benign tumour. The motivation behind studying this dataset is the develop an algorithm, which would be able to predict whether a patient has a malignant or benign tumour, based on the features computed from her breast mass. I decided to use this dataset for my first blog post on machine learning, since its a very straightforward dataset with no missing values and all variables being real valued (no categorical variables).&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Karanveer Singh</dc:creator><pubDate>Tue, 11 Jul 2017 21:00:00 +0530</pubDate><guid isPermaLink="false">tag:kvsingh.github.io,2017-07-11:/breast-cancer-dataset.html</guid><category>python</category><category>scikit-learn</category><category>pandas</category><category>machine-learning</category></item></channel></rss>
