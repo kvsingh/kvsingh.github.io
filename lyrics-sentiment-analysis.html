@@ -1,0 +1,1338 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UnInhibited Zombie, ">
+
+        <link rel="alternate" href="https://kvsingh.github.io/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
+
+        <title>Sentiment Analysis on lyrics of popular music artists // UnInhibited Zombie // </title>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pure.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="https://kvsingh.github.io">UnInhibited Zombie</a></h1>
+                            <p class="tagline"></p>
+                                <p class="social">
+                                    <a href="https://github.com/kvsingh/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://soundcloud.com/unzombie">
+                                        <i class="fa fa-soundcloud fa-3x"></i>
+                                    </a>
+                                </p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Sentiment Analysis on lyrics of popular music artists</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/music.html">music</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/nlp.html">NLP</a>
+                        </p>
+                </header>
+            </section>
+            
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this post, we are going to analyze lyrics of some of the popular artists nowadays. Music and analysis are two of my favourite things, and it was kind of obvious to combine both of them. Since I've been known to delve into analysis paralysis while making decisions, I chose to ask people on my facebook friends list about which artists they were currently listening to, instead of coming up with my own list (My propensity to listen to obscure artists doesn't help).</p>
+<p><img alt="fb-artists" src="images/fbartists.png" style="width: 300px;display: block;margin: auto;" /></p>
+<p>The code for this blog post is available at <a href="https://github.com/kvsingh/lyrics-sentiment-analysis">this github repository</a>.</p>
+<p>This post consists of three parts - <strong>Data Collection</strong> (where we get the lyrics by using <a href="https://docs.genius.com/"><strong>Genius's API</strong></a> and a bit of <strong>BeautifulSoup</strong>). In the second part, <strong>Text Analysis</strong>, we analyze the lyrics by using metrics and generating word clouds. The third part is <strong>Sentiment Analysis</strong>, where we look at the sentiment (positivity and negativity) behind the lyrics of these artists, and try to draw conclusions.</p>
+<p>Here is the list of artists I used:</p>
+<ul>
+<li>Cigarettes after Sex</li>
+<li>Eric Clapton</li>
+<li>Damien rice</li>
+<li>Dire Straits</li>
+<li>The Black keys</li>
+<li>Eminem</li>
+<li>Porcupine Tree</li>
+<li>Northlane</li>
+<li>Incubus</li>
+<li>Radiohead</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Data-Collection">Data Collection<a class="anchor-link" href="#Data-Collection">¶</a></h2><p>Since I'm a bit of a beginner to the world of data scraping, I wanted a simple solution to the data collection problem. Fortunately, after a quick google search, I came accross <a href="https://github.com/jasonqng/genius-lyrics-search">this really cool</a> python wrapper for getting lyrics from <a href="http://genius.com/">Genius.com</a>. Genius provides a handy API for searching lyrics, which is really useful when you don't have a list of songs, and do not want to parse the html heirarchy of artist, albums and songs on lyrics websites.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [25]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">search</span> <span class="kn">import</span> <span class="n">search</span>
+<span class="n">outputfilename</span> <span class="o">=</span> <span class="s2">"lyrics.csv"</span>
+<span class="n">artists</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"cigarettes after sex"</span><span class="p">,</span> <span class="s2">"eric clapton"</span><span class="p">,</span> <span class="s2">"damien rice"</span><span class="p">,</span> <span class="s2">"dire straits"</span><span class="p">,</span> \
+           <span class="s2">"the black keys"</span><span class="p">,</span> <span class="s2">"Eminem"</span><span class="p">,</span> <span class="s2">"Porcupine tree"</span><span class="p">,</span> <span class="s2">"Northlane"</span><span class="p">,</span> \
+           <span class="s2">"incubus"</span><span class="p">,</span> <span class="s2">"radiohead"</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">get_lyrics</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s2">"Authorization"</span><span class="p">,</span> <span class="s2">"Bearer "</span> <span class="o">+</span> <span class="s2">"your-client-access-token"</span><span class="p">)</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s2">"User-Agent"</span><span class="p">,</span>
+                       <span class="s2">"curl/7.9.8 (i686-pc-linux-gnu) libcurl 7.9.8 (OpenSSL 0.9.6b) (ipv6 enabled)"</span><span class="p">)</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="s2">"lxml"</span><span class="p">)</span>
+    <span class="n">lyrics</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"div"</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span> <span class="s2">"lyrics"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lyrics</span><span class="o">.</span><span class="n">text</span>
+
+<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">search</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">outputfilename</span><span class="p">,</span> <span class="s2">"your-client-access-token"</span><span class="p">)</span>
+    <span class="n">urls</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lyrics/'</span> <span class="o">+</span> <span class="n">artist</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+        <span class="n">lyrics</span> <span class="o">=</span> <span class="n">get_lyrics</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lyrics</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Esentially, what this wrapper does is provide a "search" function, where I can input an artist name, and it returns a list of urls of songs of that artist. It originally gave 100 songs, or 10 pages worth of results, but I decided to limit it to 10 songs. Genius.com has all the lyrics within a specific html tag, and I can just parse that using <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a>. This works for me, because at this point I really didn't want to get into the complicated syntax of html pages to parse these lyrics. If you're interested in learning more about scraping, check out BeautifulSoup and <a href="https://scrapy.org/">scrapy</a> (Use BeautifulSoup if you just want to get started with simple parsing, and use scrapy if you want something like a framework with more capabilities).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Lets do some basic common-sense <strong>data cleaning</strong> for our lyrics. Looking at the lyrics, there are certain "section identifiers" like "Verse", "Chorus" which we do not need. I removed them using the following simple regular expression. I also removed the empty newlines, which may not make much difference, but it makes the lyrics a bit prettier (?) to look at.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lyrics/'</span> <span class="o">+</span> <span class="n">artist</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span>
+    <span class="n">all_words</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="n">all_words</span> <span class="o">+=</span> <span class="n">this_sentence</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1">#remove identifiers like chorus, verse, etc</span>
+    <span class="n">all_words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">'[\(\[].*?[\)\]]'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="n">all_words</span><span class="p">)</span>
+    <span class="c1">#remove empty lines</span>
+    <span class="n">all_words</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_words</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span><span class="p">])</span>
+    
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lyrics/'</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">'-cleaned'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">all_words</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following is the starting of "Creep" by Radiohead, before the data cleaning.</p>
+<blockquote><p>[Verse 1]<br />
+When you were here before<br />
+Couldn't look you in the eye<br />
+You're just like an angel<br />
+Your skin makes me cry<br />
+You float like a feather<br />
+In a beautiful world</p>
+<p>[Pre-Chorus]<br />
+I wish I was special<br />
+You're so fuckin' special</p>
+<p>[Chorus]</p>
+<p>But I'm a creep<br />
+I'm a weirdo<br />
+What the hell am I doing here?<br />
+I don't belong here</p>
+</blockquote>
+<p>And this is how it looks after the cleaning:</p>
+<blockquote><p>When you were here before<br />
+Couldn't look you in the eye<br />
+You're just like an angel<br />
+Your skin makes me cry<br />
+You float like a feather<br />
+In a beautiful world<br />
+I wish I was special<br />
+You're so fuckin' special<br />
+But I'm a creep<br />
+I'm a weirdo<br />
+What the hell am I doing here?<br />
+I don't belong here</p>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Text-Analysis-and-Wordclouds">Text Analysis and Wordclouds<a class="anchor-link" href="#Text-Analysis-and-Wordclouds">¶</a></h2><p>Lets look at some metrics for each artist. First, we plot the number of words used by these artists in their 10 songs.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [30]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.figsize'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">'artist'</span><span class="p">,</span> <span class="s1">'words'</span><span class="p">))</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lyrics/'</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">'-cleaned'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span>
+    <span class="n">num_words</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">all_text</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="n">num_words_this</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">))</span>
+        <span class="n">num_words</span> <span class="o">+=</span> <span class="n">num_words_this</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">num_words</span><span class="p">)</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'artist'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'words'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Number of Words for each Artist'</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Well, <strong>Eminem</strong> has the highest number of words, by far, but we shouldn't rely on this metric alone because the length of these songs are different for different artists.</p>
+<p>A more useful metric is the <strong>vocabulary</strong>, or the number of unique words used by each artist. But that is still skewed by the length of a song. Dividing the number of words used with the vocabulary gives us a measure of the <strong>lexical richness</strong> of each artist (i.e., what proportion of the words used in the songs are distinct). Before measuring this metric, though, we need to do remove stop words (like 'the', 'or', 'and').</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [31]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">'artist'</span><span class="p">,</span> <span class="s1">'lexicalrichness'</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lyrics/'</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">'-cleaned'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span>
+    <span class="n">all_words</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="n">num_words</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">raw_text</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">this_sentence</span>
+            
+    <span class="n">words</span> <span class="o">=</span> <span class="n">raw_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
+    <span class="n">filtered_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'english'</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">></span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'na'</span><span class="p">,</span><span class="s1">'la'</span><span class="p">]]</span> <span class="c1"># remove the stopwords</span>
+    
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">filtered_words</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+    
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'artist'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'lexicalrichness'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Lexical richness of each Artist'</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+dnl1ZmZWqmuvvZZHHnmEO++8k6lTpzJ58mRuvvlmRo8ezSc+8Qm+/e1vc8QRR/C5z31uQRDXnHnm
+mUybNo2pU6dyzz33MG7cOAAOPvhgJk6cyH333ccbb7zBFVdc0ep7r7HGGkyZMoXPfvazC4699dZb
+7LXXXvzsZz/j7rvv5vrrr6d///4ATJ06lYsvvph7772Xiy++mCeffBKA1157jTFjxnD33XczduxY
+fvOb3wBwyCGH8PWvf52JEydy2WWXMX78eABOPfVUfvnLXzJ16lRuueUW+vfvz4UXXshHP/pRpk6d
+yt13383IkSO79gfNUl7L2szMquXaa6/l2muvZbPNNgNg9uzZPPLII4wdO5ZjjjmG0aNH069fP37+
+858v9tzrr7+egw46iGWXLaJm9dVXB+DGG2/k5JNP5vXXX+fFF19kk0024eMf//hiz99rr70WO/bw
+ww8zaNAgRo8eDcDKK6+84L4ddtiBVVZZBYCNN96YJ554giFDhrDccsux6667AvD+97+f6667bkF9
+DzzwwILnv/rqq8yePZttttmGww47jHHjxvHpT3+awYMHM3r0aL70pS8xd+5cdtttNweymZktXRHB
+0UcfzYEHHrjYfS+88AKzZ89m7ty5zJkzhxVXXLHp682ZM4evfOUrTJo0iSFDhnDcccc1nC7Unter
+t/zyyy/4vk+fPsybV8zM7du374JR0PXH3377bf7973/Tr1+/RV7nqKOOYpddduGqq65im2224e9/
+/ztjx47l5ptv5sorr+QLX/gChx12GJ///OeXqL5mvJa1mZk19NGPfpSzzz6b2bNnA/DUU0/x3HPP
+AXDggQdywgknMG7cOI488sjFnrvjjjtyxhlnLAjAF198cUH4rrnmmsyePXuJB4BtuOGGzJgxg4kT
+JwIwa9asBa+/pD7ykY8s6NeGoskb4LHHHuN973sfRx55JKNHj+ahhx7iiSeeYK211uKAAw5g/Pjx
+TJkypUPv2RZfIZtZ5XX1KOSa7hyNXBUf+chHePDBB9lqq62AYoDUBRdcwDXXXEPfvn3ZZ599mD9/
+PltvvTX/+Mc/ePe7373guePHj+c///kPI0aMoG/fvhxwwAEcfPDBHHDAAQwfPpx3vvOdC5qe22u5
+5Zbj4osv5v/9v//HG2+8Qf/+/ducDtWWn//853z1q19lxIgRzJs3j7Fjx3L66afz05/+lBtvvJFl
+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
+" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>It looks like Porcupine Tree, The Black Keys and Northlane use a higher variety of words in their lyrics compared to Damien Rice. Although Eminem uses a large number of words compared to the others, and his vocabulary size is also bigger, his lexical richness is average compared to some of the other artists.</p>
+<p>Now lets look at some of the interesting word clouds. This step doesn't have much of a purpose if you're not a fan of any of these artists, otherwise its interesting to look at the most commonly used words. I should also point out that the wordcloud library which I use, also aggregates multiple words together while considering the word frequencies, so you'll frequently see "2 word" combinations in them.</p>
+<p>Dire straits seem to use the word "chicks" a lot.</p>
+<p><img alt="direstraits" src="images/dire straits.png" style="width: 500px;" /></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Eric clapton's word cloud is all about love, romance and Cocaine.</p>
+<p><img alt="direstraits" src="images/eric clapton.png" style="width: 500px;" /></p>
+<p>Northlane, a metal band, as expected, has more "negative" lyrics, dealing with isolation and loneliness and all that jazz.</p>
+<p><img alt="direstraits" src="images/Northlane.png" style="width: 500px;" /></p>
+<p>Radiohead's music seems to deal with a lot of broken hearts, truth and "mess" (I assume this has something to do with messy relationships?)</p>
+<p><img alt="direstraits" src="images/radiohead.png" style="width: 500px;" /></p>
+<p>Eminem is the only artists with visible profanities in the word cloud:</p>
+<p><img alt="direstraits" src="images/Eminem.png" style="width: 500px;" /></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Sentiment-Analysis">Sentiment Analysis<a class="anchor-link" href="#Sentiment-Analysis">¶</a></h2><p>Now, we'll use sentiment analysis to describe what proportion of lyrics of these artists are positive, negative or neutral. I was initially using the <a href="https://textblob.readthedocs.io/en/dev/index.html">TextBlob</a> library, which is built on top of <a href="http://www.nltk.org/">NLTK</a> (also known as the Natural Language Toolkit). While searching around these NLP frameworks, I used the following simple test : whether the library is able to distinguish between the following two sentences:</p>
+<blockquote><p>I'm feeling good</p>
+<p>I'm feeling so good</p>
+</blockquote>
+<p>Ideally, the library should be able infer that the second statement is "more" positive. I tried this on both TextBlob and NLTK's <a href="https://github.com/cjhutto/vaderSentiment">Vader Sentiment analyzer</a>. TextBlob did not give any difference, while Vader passed the test. Of course, which one is a "better" library to use is totally based on your use case, and I'm sure that TextBlob does some things much better than NLTK.</p>
+<p>NLTK's sentiment analyzer gives a normalized unidimensional metric of sentiment of a given sentence. This value can be thresholded to determine whether the sentence is considered positive, negative, or neutral.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [45]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.sentiment.vader</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">'artist'</span><span class="p">,</span> <span class="s1">'pos'</span><span class="p">,</span> <span class="s1">'neu'</span><span class="p">,</span> <span class="s1">'neg'</span><span class="p">))</span>
+<span class="n">sid</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
+    <span class="n">num_positive</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_negative</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_neutral</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lyrics/'</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">'-cleaned'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="n">sid</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">this_sentence</span><span class="p">)</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="n">comp</span><span class="p">[</span><span class="s1">'compound'</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">comp</span> <span class="o">>=</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">num_positive</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">comp</span> <span class="o">></span> <span class="o">-</span><span class="mf">0.5</span> <span class="ow">and</span> <span class="n">comp</span> <span class="o"><</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">num_neutral</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_negative</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">num_total</span> <span class="o">=</span> <span class="n">num_negative</span> <span class="o">+</span> <span class="n">num_neutral</span> <span class="o">+</span> <span class="n">num_positive</span>
+    <span class="n">percent_negative</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_negative</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">num_total</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span>
+    <span class="n">percent_neutral</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_neutral</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">num_total</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span>
+    <span class="n">percent_positive</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_positive</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">num_total</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">percent_positive</span><span class="p">,</span> <span class="n">percent_neutral</span><span class="p">,</span> <span class="n">percent_negative</span><span class="p">)</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+                 
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'artist'</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>          
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+/j9ckN09Z7sPBAAAAABJRU5ErkJggg==
+" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+<thead><tr>
+<th>Artist</th>
+<th>Neg</th>
+<th>Neutral</th>
+<th>Pos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cigarettes After Sex    </td>
+<td>3.5     </td>
+<td>86.3   </td>
+<td>10.1   </td>
+</tr>
+<tr>
+<td>Eric Clapton</td>
+<td>2.2</td>
+<td>80.0</td>
+<td>17.8</td>
+</tr>
+<tr>
+<td>Damien Rice</td>
+<td>6.1</td>
+<td>87.6</td>
+<td>6.3</td>
+</tr>
+<tr>
+<td>Dire Straits</td>
+<td>5.2</td>
+<td>84.2</td>
+<td>10.6</td>
+</tr>
+<tr>
+<td>The Black Keys</td>
+<td>6.9</td>
+<td>85.4</td>
+<td>7.7</td>
+</tr>
+<tr>
+<td>Eminem</td>
+<td>12.6</td>
+<td>80.1</td>
+<td>7.3</td>
+</tr>
+<tr>
+<td>Porcupine tree</td>
+<td>3.5</td>
+<td>89.9</td>
+<td>6.7</td>
+</tr>
+<tr>
+<td>Northlane</td>
+<td>8.3</td>
+<td>88.3</td>
+<td>3.4</td>
+</tr>
+<tr>
+<td>Incubus</td>
+<td>3.4</td>
+<td>83.2</td>
+<td>13.5</td>
+</tr>
+<tr>
+<td>Radiohead</td>
+<td>9.9</td>
+<td>83.0</td>
+<td>7.1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Negative-lyrics">Negative lyrics<a class="anchor-link" href="#Negative-lyrics">¶</a></h3><p><strong>Eminem</strong> wins the negative lyrics contest (not surprisingly), with 12.6% of his lyrics being negative. <strong>Radiohead</strong> comes in second, with 9.9%. <strong>Eric Clapton</strong> has the least negative lyrics, at 2.2%. One surprise is <strong>Porcupine tree</strong>, at 3.5%, considering how sad their lyrics can be. This has led me to hypothesize that <strong>aggression seems to be a much more negative emotion compared to sadness</strong> (since Eminem has much more negative lyrics than Porcupine Tree). Radiohead seems to have both a decent amount of aggression as well as sadness. Of course, all this analysis and hypothesizing is subject to the 10 songs of these artists, and any generalizations made here should be taken with a grain of salt.</p>
+<h3 id="Positive-lyrics">Positive lyrics<a class="anchor-link" href="#Positive-lyrics">¶</a></h3><p><strong>Eric Clapton</strong> wins this one at 17.8%. He also had the least percentage of negative lyrics. Conclusion : his lyrics are generally much more "happier" than the rest. <strong>Incubus</strong> comes in second at 13.4%. <strong>Northlane</strong> comes in last at 3.4% (validating the metal music stereotype). I would say, overall, Northlane and Eminem are tied at having the "least happiest" lyrics.</p>
+<h2 id="That's-it-for-now!">That's it for now!<a class="anchor-link" href="#That's-it-for-now!">¶</a></h2><p>Of course, a lot more can be done with this topic, but a wise man once told me that one should know when to stop. I would love to know what you thought of my analysis (no doubt, you'll have strong feelings if you're fans of any of these artists). What other metrics could I have looked at? Let me know in the comments below!</p>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Karanveer Singh &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-41437726-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>
