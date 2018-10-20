@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UnInhibited Zombie, ">
 
-        <link rel="alternate" href="https://kvsingh.github.io/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
+        <link rel="alternate"  href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
+        <link rel="alternate" href="http://localhost:8000/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
 
         <title>Analyzing my Facebook posts through the years // UnInhibited Zombie // </title>
 
@@ -63,8 +64,7 @@
                 </header>
             </section>
             
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -82,24 +82,24 @@
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">facebook</span><span class="o">,</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
 <span class="kn">import</span> <span class="nn">csv</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'data-statuses.csv'</span><span class="p">,</span> <span class="s1">'wb'</span><span class="p">))</span>
-<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">'polarity'</span><span class="p">,</span> <span class="s1">'subjectivity'</span><span class="p">,</span> <span class="s1">'num_reactions'</span><span class="p">,</span> <span class="s1">'length'</span><span class="p">,</span> <span class="s1">'num_words'</span><span class="p">,</span> <span class="s1">'month'</span><span class="p">,</span> <span class="s1">'dow'</span><span class="p">,</span> <span class="s1">'tod'</span><span class="p">])</span>
-<span class="n">graph</span> <span class="o">=</span> <span class="n">facebook</span><span class="o">.</span><span class="n">GraphAPI</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="s1">'youraccesstoken'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">'2.8'</span><span class="p">)</span>
-<span class="n">posts</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">'me'</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s1">'posts'</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data-statuses.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;polarity&#39;</span><span class="p">,</span> <span class="s1">&#39;subjectivity&#39;</span><span class="p">,</span> <span class="s1">&#39;num_reactions&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="s1">&#39;num_words&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;dow&#39;</span><span class="p">,</span> <span class="s1">&#39;tod&#39;</span><span class="p">])</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">facebook</span><span class="o">.</span><span class="n">GraphAPI</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="s1">&#39;youraccesstoken&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;2.8&#39;</span><span class="p">)</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s1">&#39;posts&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">post_id</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'message'</span><span class="p">]</span>
+        <span class="n">post_id</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span>
 
-        <span class="n">time_string</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'created_time'</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">time_string</span><span class="p">,</span> <span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S'</span><span class="p">)</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">'time'</span><span class="p">]</span>
+        <span class="n">time_string</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;created_time&#39;</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">time_string</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
 
         <span class="n">blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
         <span class="n">polarity</span><span class="p">,</span> <span class="n">subjectivity</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">sentiment</span>
         <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
-        <span class="n">num_words</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">))</span>
-        <span class="n">post_reactions</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post_id</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s2">"reactions"</span><span class="p">)</span>
+        <span class="n">num_words</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span>
+        <span class="n">post_reactions</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post_id</span><span class="p">,</span> <span class="n">connection_name</span><span class="o">=</span><span class="s2">&quot;reactions&quot;</span><span class="p">)</span>
         <span class="n">num_reactions</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">post_reactions</span><span class="p">)</span>
 
         <span class="n">month</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">month</span>
@@ -111,27 +111,35 @@
         <span class="k">continue</span>
 </pre></div>
 <p>Now, lets start the analysis. We use pandas to load the data in the csv file to a dataframe.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In [2]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
-<div class="input_area">
+    <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'data-statuses.csv'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data-statuses.csv&#39;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
+
 </div>
 </div>
 </div>
+
 <div class="output_wrapper">
 <div class="output">
+
+
 <div class="output_area">
+
 <div class="prompt"></div>
+
+
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>   polarity  subjectivity  num_reactions  length  num_words  month  dow  tod
 0  0.125000      0.458333             18     312         59      7    4   20
@@ -143,20 +151,13 @@
 </pre>
 </div>
 </div>
+
 </div>
 </div>
+
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In [ ]:</div>
-<div class="inner_cell">
-<div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
+ 
+
 
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');

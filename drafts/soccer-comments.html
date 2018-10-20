@@ -8,7 +8,7 @@
         <link rel="alternate"  href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
         <link rel="alternate" href="http://localhost:8000/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
 
-        <title>Football subreddit word clouds - Visualizing transfer window madness // UnInhibited Zombie // </title>
+        <title>Analyzing the relationship between personality traits and drug consumption // UnInhibited Zombie // </title>
 
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
@@ -54,11 +54,12 @@
         <div class="content">
             <section class="post">
                 <header class="post-header">
-                    <h1>Football subreddit word clouds - Visualizing transfer window madness</h1>
+                    <h1>Analyzing the relationship between personality traits and drug consumption</h1>
                         <p class="post-meta">
                             // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
-                                <a class="post-category" href="https://kvsingh.github.io/tag/data-visualization.html">data-visualization</a>
-                                <a class="post-category" href="https://kvsingh.github.io/tag/reddit.html">reddit</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/scikit-learn.html">scikit-learn</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/machine-learning.html">machine-learning</a>
                         </p>
                 </header>
             </section>
@@ -67,107 +68,8 @@
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><a href="reddit.com">Reddit</a> is one of my favourite discussion websites. It is a forum where people can post links or text posts which are downvoted and upvoted by users. "Subreddits" are communities based on a certain topic - like business, news, sports. Being a big football fan, I frequently visit the football-related subreddits. If you've been following European football at all, you'll know that even though the transfer window is not yet over, the past month or so has been crazy in terms of transfer news.</p>
-<p>I have also been getting familiar with data visualization tools, and I thought it would be really cool to draw word clouds of football team's subreddit posts, and try to visualize the obsession of football fans with the transfer window.</p>
-<p>I took the titles of 1000 top voted posts of the last month for the <a href="https://www.reddit.com/r/soccer/comments/6n33rt/football_clubs_with_the_largest_subreddits_on/">10 most subscribed football subreddits</a>, and /r/soccer - which is the most subscribed neutral football subreddit. The code for generating these word clouds is available on <a href="https://github.com/kvsingh/reddit-scripts/blob/master/wordclouds-soccer-team-subreddits.py">Github</a></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h1><h2 id="/r/soccer">/r/soccer<a class="anchor-link" href="#/r/soccer">&#182;</a></h2><p><img src="images/soccer-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>What can we infer from this word cloud?</p>
-<ul>
-<li>Neymar will sign for Chelsea (Thanks to /u/elCheirinho for this very humorous insight)</li>
-<li>On a serious note, Neymar has captured the news a lot with his possible move to PSG, hence its not a surprise that he's here.</li>
-<li>Most major clubs other than Chelsea, like Manchester United, Manchester City, etc have multiple names (United, ManU, City), while Chelsea is probably the only major club with a single name, hence Chelsea is the biggest word in the cloud (in terms of team names). Thanks to /u/here-i-cum for this insight.</li>
-</ul>
-<p>Now lets look at the individual teams.</p>
-<h2 id="Arsenal-(/r/Gunners)">Arsenal (/r/Gunners)<a class="anchor-link" href="#Arsenal-(/r/Gunners)">&#182;</a></h2><p><img src="images/Gunners-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Lacazatte has been the main transfer target for Arsenal this summer.</li>
-<li>Wenger, and whether he stays/leaves is always on people's minds at the start of every season.</li>
-</ul>
-<h2 id="Manchester-United-(/r/reddevils)">Manchester United (/r/reddevils)<a class="anchor-link" href="#Manchester-United-(/r/reddevils)">&#182;</a></h2><p><img src="images/reddevils-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>This looks like a more balanced word cloud than the other ones. None of the words really stand out (other than United and Manchester United). </li>
-<li>We can hypothesize that the /r/reddevils were least obsessed about a single transfer target. Their titles are divided between Rooney, Everton, Lukaku, Mourinho, Chelsea, etc. This is also due to the fact that their major signing - Lukaku, had a lot of other variables involved with the transfer - Chelsea were looking to sign him as well, while Lukaku made a lot of statements on how he wants to leave Everton, and so on.</li>
-</ul>
-<h2 id="Liverpool-(/r/liverpoolfc)">Liverpool (/r/liverpoolfc)<a class="anchor-link" href="#Liverpool-(/r/liverpoolfc)">&#182;</a></h2><p><img src="images/lfc-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /></p>
-<ul>
-<li>Liverpool tapped up Salah early in the window, and their recent obsession has been with the constant on-and-off transfer saga of Naby Keita</li>
-<li>Coutinho has also been in the news, because of Barcelona's interest, and we see him having a decent representation in the word cloud as well.</li>
-</ul>
-<p>Following are the word clouds from the other football team subreddits.</p>
-<table cellspacing="5" cellpadding="5">
-<col width="50%">
-<col width="50%">
-<tr>
-<td>
-<h2> Chelsea (/r/chelseafc) </h2> <img src="images/chelseafc-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-<td>
-<h2>Tottenham Hotspurs (/r/coys) </h2> <img src="images/coys-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-</tr>
-
-<tr>
-<td>
-<h2> Barcelona (/r/Barca) </h2>
-<img src="images/Barca-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-<td>
-<h2> Real Madrid (/r/realmadrid) </h2>
-<img src="images/realmadrid-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-</tr>
-
-<tr>
-<td>
-<h2> Manchester City (/r/MCFC) </h2>
-<img src="images/MCFC-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-
-<td>
-<h2> Bayern Munich (/r/fcbayern) </h2>
-<img src="images/fcbayern-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-</tr>
-
-<tr>
-<td>
-<h2> Borussia Dortmund (/r/borussiadortmund) </h2>
-<img src="images/borussiadortmund-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" />
-</td>
-</tr>
-</table><p>Well, this was a lot of fun. I'm working on some similar ideas - like including the comments data as well, to analyze how optimistic/pessimistic fans of different teams are. Please comment below if you would like to add some more analysis from these word clouds - unfortunately I could only do 3 teams for now.</p>
+<p>Substance abuse is one of the biggest unsolved problems of our times. Several strategies, including abstinence, harm reduction, psychotherapy and medication have been used to tackle this problem. I feel that understanding is a crucial step in solving a social issue. In this post, I try to take a small step towards this by analyzing the relationship between drug consumption and personality traits of a person.</p>
+<p>The data used is from the UCI database available (<a href="https://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29)[here">https://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29)[here</a>].</p>
 
 </div>
 </div>

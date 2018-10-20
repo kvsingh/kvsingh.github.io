@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>UnInhibited Zombie</title><link href="https://kvsingh.github.io/" rel="alternate"></link><link href="http://localhost:8000/feeds/data-visualization.atom.xml" rel="self"></link><id>https://kvsingh.github.io/</id><updated>2017-07-31T21:00:00+05:30</updated><entry><title>Football subreddit word clouds - Visualizing transfer window madness</title><link href="https://kvsingh.github.io/soccer-subreddit-wordcloud.html" rel="alternate"></link><updated>2017-07-31T21:00:00+05:30</updated><author><name>Karanveer Singh</name></author><id>tag:kvsingh.github.io,2017-07-31:soccer-subreddit-wordcloud.html</id><summary type="html">
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;&lt;a href="reddit.com"&gt;Reddit&lt;/a&gt; is one of my favourite discussion websites. It is a forum where people can post links or text posts which are downvoted and upvoted by users. "Subreddits" are communities based on a certain topic - like business, news, sports. Being a big football fan, I frequently visit the football-related subreddits. If you've been following European football at all, you'll know that even though the transfer window is not yet over, the past month or so has been crazy in terms of transfer news.&lt;/p&gt;
+&lt;p&gt;I have also been getting familiar with data visualization tools, and I thought it would be really cool to draw word clouds of football team's subreddit posts, and try to visualize the obsession of football fans with the transfer window.&lt;/p&gt;
+&lt;p&gt;I took the titles of 1000 top voted posts of the last month for the &lt;a href="https://www.reddit.com/r/soccer/comments/6n33rt/football_clubs_with_the_largest_subreddits_on/"&gt;10 most subscribed football subreddits&lt;/a&gt;, and /r/soccer - which is the most subscribed neutral football subreddit. The code for generating these word clouds is available on &lt;a href="https://github.com/kvsingh/reddit-scripts/blob/master/wordclouds-soccer-team-subreddits.py"&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h1 id="Results"&gt;Results&lt;a class="anchor-link" href="#Results"&gt;&amp;#182;&lt;/a&gt;&lt;/h1&gt;&lt;h2 id="/r/soccer"&gt;/r/soccer&lt;a class="anchor-link" href="#/r/soccer"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;img src="images/soccer-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /&gt;&lt;/p&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;What can we infer from this word cloud?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Neymar will sign for Chelsea (Thanks to /u/elCheirinho for this very humorous insight)&lt;/li&gt;
+&lt;li&gt;On a serious note, Neymar has captured the news a lot with his possible move to PSG, hence its not a surprise that he's here.&lt;/li&gt;
+&lt;li&gt;Most major clubs other than Chelsea, like Manchester United, Manchester City, etc have multiple names (United, ManU, City), while Chelsea is probably the only major club with a single name, hence Chelsea is the biggest word in the cloud (in terms of team names). Thanks to /u/here-i-cum for this insight.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now lets look at the individual teams.&lt;/p&gt;
+&lt;h2 id="Arsenal-(/r/Gunners)"&gt;Arsenal (/r/Gunners)&lt;a class="anchor-link" href="#Arsenal-(/r/Gunners)"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;img src="images/Gunners-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /&gt;&lt;/p&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;ul&gt;
+&lt;li&gt;Lacazatte has been the main transfer target for Arsenal this summer.&lt;/li&gt;
+&lt;li&gt;Wenger, and whether he stays/leaves is always on people's minds at the start of every season.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="Manchester-United-(/r/reddevils)"&gt;Manchester United (/r/reddevils)&lt;a class="anchor-link" href="#Manchester-United-(/r/reddevils)"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;img src="images/reddevils-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /&gt;&lt;/p&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;ul&gt;
+&lt;li&gt;This looks like a more balanced word cloud than the other ones. None of the words really stand out (other than United and Manchester United). &lt;/li&gt;
+&lt;li&gt;We can hypothesize that the /r/reddevils were least obsessed about a single transfer target. Their titles are divided between Rooney, Everton, Lukaku, Mourinho, Chelsea, etc. This is also due to the fact that their major signing - Lukaku, had a lot of other variables involved with the transfer - Chelsea were looking to sign him as well, while Lukaku made a lot of statements on how he wants to leave Everton, and so on.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="Liverpool-(/r/liverpoolfc)"&gt;Liverpool (/r/liverpoolfc)&lt;a class="anchor-link" href="#Liverpool-(/r/liverpoolfc)"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;img src="images/lfc-top-1000-month.png" alt="soccer-wordcloud" style="width: 700px;" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Liverpool tapped up Salah early in the window, and their recent obsession has been with the constant on-and-off transfer saga of Naby Keita&lt;/li&gt;
+&lt;li&gt;Coutinho has also been in the news, because of Barcelona's interest, and we see him having a decent representation in the word cloud as well.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Following are the word clouds from the other football team subreddits.&lt;/p&gt;
+&lt;table cellspacing="5" cellpadding="5"&gt;
+&lt;col width="50%"&gt;
+&lt;col width="50%"&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;h2&gt; Chelsea (/r/chelseafc) &lt;/h2&gt; &lt;img src="images/chelseafc-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+&lt;td&gt;
+&lt;h2&gt;Tottenham Hotspurs (/r/coys) &lt;/h2&gt; &lt;img src="images/coys-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;
+&lt;h2&gt; Barcelona (/r/Barca) &lt;/h2&gt;
+&lt;img src="images/Barca-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+&lt;td&gt;
+&lt;h2&gt; Real Madrid (/r/realmadrid) &lt;/h2&gt;
+&lt;img src="images/realmadrid-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;
+&lt;h2&gt; Manchester City (/r/MCFC) &lt;/h2&gt;
+&lt;img src="images/MCFC-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+
+&lt;td&gt;
+&lt;h2&gt; Bayern Munich (/r/fcbayern) &lt;/h2&gt;
+&lt;img src="images/fcbayern-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;
+&lt;h2&gt; Borussia Dortmund (/r/borussiadortmund) &lt;/h2&gt;
+&lt;img src="images/borussiadortmund-top-1000-month.png" alt="soccer-wordcloud" style="width: 400px;" /&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&lt;p&gt;Well, this was a lot of fun. I'm working on some similar ideas - like including the comments data as well, to analyze how optimistic/pessimistic fans of different teams are. Please comment below if you would like to add some more analysis from these word clouds - unfortunately I could only do 3 teams for now.&lt;/p&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+ 
+
+
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;
+</summary><category term="python"></category><category term="data-visualization"></category><category term="reddit"></category></entry></feed>

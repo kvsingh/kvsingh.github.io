@@ -1,278 +1,214 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="UnInhibited Zombie, ">
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>UnInhibited Zombie</title><link href="https://kvsingh.github.io/" rel="alternate"></link><link href="http://localhost:8000/feeds/nlp-sentiment-analysis-music.atom.xml" rel="self"></link><id>https://kvsingh.github.io/</id><updated>2017-10-03T21:00:00+05:30</updated><entry><title>Sentiment Analysis on lyrics of popular music artists</title><link href="https://kvsingh.github.io/lyrics-sentiment-analysis.html" rel="alternate"></link><updated>2017-10-03T21:00:00+05:30</updated><author><name>Karanveer Singh</name></author><id>tag:kvsingh.github.io,2017-10-03:lyrics-sentiment-analysis.html</id><summary type="html">
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;In this post, we are going to analyze lyrics of some of the popular artists nowadays. Music and analysis are two of my favourite things, and it was kind of obvious to combine both of them. Since I've been known to delve into analysis paralysis while making decisions, I chose to ask people on my facebook friends list about which artists they were currently listening to, instead of coming up with my own list (My propensity to listen to obscure artists doesn't help).&lt;/p&gt;
+&lt;p&gt;&lt;img src="images/fbartists.png" alt="fb-artists" style="width: 300px;display: block;margin: auto;" /&gt;&lt;/p&gt;
+&lt;p&gt;The code for this blog post is available at &lt;a href="https://github.com/kvsingh/lyrics-sentiment-analysis"&gt;this github repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This post consists of three parts - &lt;strong&gt;Data Collection&lt;/strong&gt; (where we get the lyrics by using &lt;a href="https://docs.genius.com/"&gt;&lt;strong&gt;Genius's API&lt;/strong&gt;&lt;/a&gt; and a bit of &lt;strong&gt;BeautifulSoup&lt;/strong&gt;). In the second part, &lt;strong&gt;Text Analysis&lt;/strong&gt;, we analyze the lyrics by using metrics and generating word clouds. The third part is &lt;strong&gt;Sentiment Analysis&lt;/strong&gt;, where we look at the sentiment (positivity and negativity) behind the lyrics of these artists, and try to draw conclusions.&lt;/p&gt;
+&lt;p&gt;Here is the list of artists I used:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cigarettes after Sex&lt;/li&gt;
+&lt;li&gt;Eric Clapton&lt;/li&gt;
+&lt;li&gt;Damien rice&lt;/li&gt;
+&lt;li&gt;Dire Straits&lt;/li&gt;
+&lt;li&gt;The Black keys&lt;/li&gt;
+&lt;li&gt;Eminem&lt;/li&gt;
+&lt;li&gt;Porcupine Tree&lt;/li&gt;
+&lt;li&gt;Northlane&lt;/li&gt;
+&lt;li&gt;Incubus&lt;/li&gt;
+&lt;li&gt;Radiohead&lt;/li&gt;
+&lt;/ul&gt;
 
-        <link rel="alternate"  href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
-        <link rel="alternate" href="http://localhost:8000/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h2 id="Data-Collection"&gt;Data Collection&lt;a class="anchor-link" href="#Data-Collection"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Since I'm a bit of a beginner to the world of data scraping, I wanted a simple solution to the data collection problem. Fortunately, after a quick google search, I came accross &lt;a href="https://github.com/jasonqng/genius-lyrics-search"&gt;this really cool&lt;/a&gt; python wrapper for getting lyrics from &lt;a href="http://genius.com/"&gt;Genius.com&lt;/a&gt;. Genius provides a handy API for searching lyrics, which is really useful when you don't have a list of songs, and do not want to parse the html heirarchy of artist, albums and songs on lyrics websites.&lt;/p&gt;
 
-        <title>Sentiment Analysis on lyrics of popular music artists // UnInhibited Zombie // </title>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[25]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;search&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;search&lt;/span&gt;
+&lt;span class="n"&gt;outputfilename&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;lyrics.csv&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;artists&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cigarettes after sex&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;eric clapton&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;damien rice&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;dire straits&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; \
+           &lt;span class="s2"&gt;&amp;quot;the black keys&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Eminem&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Porcupine tree&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Northlane&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; \
+           &lt;span class="s2"&gt;&amp;quot;incubus&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;radiohead&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_lyrics&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;urllib2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_header&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Authorization&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Bearer &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;your-client-access-token&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_header&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;User-Agent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                       &lt;span class="s2"&gt;&amp;quot;curl/7.9.8 (i686-pc-linux-gnu) libcurl 7.9.8 (OpenSSL 0.9.6b) (ipv6 enabled)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;page&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;urllib2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urlopen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;soup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BeautifulSoup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;page&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;lxml&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;lyrics&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;soup&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;div&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;class_&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;lyrics&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;lyrics&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pure.css">
-    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pygments.css">
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;artists&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;search&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;outputfilename&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;your-client-access-token&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;urls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lyrics/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;urls&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;lyrics&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;get_lyrics&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;lyrics&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;utf8&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $(".content").fitVids();
-        });
-    </script>
-</head>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<body>
-    <div class="pure-g-r" id="layout">
-        <div class="sidebar pure-u">
-            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
-                <div class="cover-body">
-                    <header class="header">
-                        <hgroup>
-                            <h1 class="brand-main"><a href="https://kvsingh.github.io">UnInhibited Zombie</a></h1>
-                            <p class="tagline"></p>
-                                <p class="social">
-                                    <a href="https://github.com/kvsingh/">
-                                        <i class="fa fa-github fa-3x"></i>
-                                    </a>
-                                    <a href="https://soundcloud.com/unzombie">
-                                        <i class="fa fa-soundcloud fa-3x"></i>
-                                    </a>
-                                    <a href="https://kvsingh.github.io/feeds/all.rss.xml">
-                                        <i class="fa fa-rss fa-3x"></i>
-                                    </a>
-                                </p>
-                        </hgroup>
-                    </header>
-                </div>
-            </div>
-        </div>
-    <div class="pure-u">
-        <div class="content">
-            <section class="post">
-                <header class="post-header">
-                    <h1>Sentiment Analysis on lyrics of popular music artists</h1>
-                        <p class="post-meta">
-                            // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
-                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
-                                <a class="post-category" href="https://kvsingh.github.io/tag/music.html">music</a>
-                                <a class="post-category" href="https://kvsingh.github.io/tag/nlp.html">NLP</a>
-                        </p>
-                </header>
-            </section>
-            
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In this post, we are going to analyze lyrics of some of the popular artists nowadays. Music and analysis are two of my favourite things, and it was kind of obvious to combine both of them. Since I've been known to delve into analysis paralysis while making decisions, I chose to ask people on my facebook friends list about which artists they were currently listening to, instead of coming up with my own list (My propensity to listen to obscure artists doesn't help).</p>
-<p><img src="images/fbartists.png" alt="fb-artists" style="width: 300px;display: block;margin: auto;" /></p>
-<p>The code for this blog post is available at <a href="https://github.com/kvsingh/lyrics-sentiment-analysis">this github repository</a>.</p>
-<p>This post consists of three parts - <strong>Data Collection</strong> (where we get the lyrics by using <a href="https://docs.genius.com/"><strong>Genius's API</strong></a> and a bit of <strong>BeautifulSoup</strong>). In the second part, <strong>Text Analysis</strong>, we analyze the lyrics by using metrics and generating word clouds. The third part is <strong>Sentiment Analysis</strong>, where we look at the sentiment (positivity and negativity) behind the lyrics of these artists, and try to draw conclusions.</p>
-<p>Here is the list of artists I used:</p>
-<ul>
-<li>Cigarettes after Sex</li>
-<li>Eric Clapton</li>
-<li>Damien rice</li>
-<li>Dire Straits</li>
-<li>The Black keys</li>
-<li>Eminem</li>
-<li>Porcupine Tree</li>
-<li>Northlane</li>
-<li>Incubus</li>
-<li>Radiohead</li>
-</ul>
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Esentially, what this wrapper does is provide a "search" function, where I can input an artist name, and it returns a list of urls of songs of that artist. It originally gave 100 songs, or 10 pages worth of results, but I decided to limit it to 10 songs. Genius.com has all the lyrics within a specific html tag, and I can just parse that using &lt;a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/"&gt;BeautifulSoup&lt;/a&gt;. This works for me, because at this point I really didn't want to get into the complicated syntax of html pages to parse these lyrics. If you're interested in learning more about scraping, check out BeautifulSoup and &lt;a href="https://scrapy.org/"&gt;scrapy&lt;/a&gt; (Use BeautifulSoup if you just want to get started with simple parsing, and use scrapy if you want something like a framework with more capabilities).&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data-Collection">Data Collection<a class="anchor-link" href="#Data-Collection">&#182;</a></h2><p>Since I'm a bit of a beginner to the world of data scraping, I wanted a simple solution to the data collection problem. Fortunately, after a quick google search, I came accross <a href="https://github.com/jasonqng/genius-lyrics-search">this really cool</a> python wrapper for getting lyrics from <a href="http://genius.com/">Genius.com</a>. Genius provides a handy API for searching lyrics, which is really useful when you don't have a list of songs, and do not want to parse the html heirarchy of artist, albums and songs on lyrics websites.</p>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Lets do some basic common-sense &lt;strong&gt;data cleaning&lt;/strong&gt; for our lyrics. Looking at the lyrics, there are certain "section identifiers" like "Verse", "Chorus" which we do not need. I removed them using the following simple regular expression. I also removed the empty newlines, which may not make much difference, but it makes the lyrics a bit prettier (?) to look at.&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">search</span> <span class="kn">import</span> <span class="n">search</span>
-<span class="n">outputfilename</span> <span class="o">=</span> <span class="s2">&quot;lyrics.csv&quot;</span>
-<span class="n">artists</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cigarettes after sex&quot;</span><span class="p">,</span> <span class="s2">&quot;eric clapton&quot;</span><span class="p">,</span> <span class="s2">&quot;damien rice&quot;</span><span class="p">,</span> <span class="s2">&quot;dire straits&quot;</span><span class="p">,</span> \
-           <span class="s2">&quot;the black keys&quot;</span><span class="p">,</span> <span class="s2">&quot;Eminem&quot;</span><span class="p">,</span> <span class="s2">&quot;Porcupine tree&quot;</span><span class="p">,</span> <span class="s2">&quot;Northlane&quot;</span><span class="p">,</span> \
-           <span class="s2">&quot;incubus&quot;</span><span class="p">,</span> <span class="s2">&quot;radiohead&quot;</span><span class="p">]</span>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[&amp;nbsp;]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;artists&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lyrics/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;all_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;readlines&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+        &lt;span class="n"&gt;this_sentence&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;all_words&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;this_sentence&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-<span class="k">def</span> <span class="nf">get_lyrics</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
-    <span class="n">request</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="s2">&quot;your-client-access-token&quot;</span><span class="p">)</span>
-    <span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s2">&quot;User-Agent&quot;</span><span class="p">,</span>
-                       <span class="s2">&quot;curl/7.9.8 (i686-pc-linux-gnu) libcurl 7.9.8 (OpenSSL 0.9.6b) (ipv6 enabled)&quot;</span><span class="p">)</span>
-    <span class="n">page</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="s2">&quot;lxml&quot;</span><span class="p">)</span>
-    <span class="n">lyrics</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span> <span class="s2">&quot;lyrics&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">lyrics</span><span class="o">.</span><span class="n">text</span>
-
-<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">search</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">outputfilename</span><span class="p">,</span> <span class="s2">&quot;your-client-access-token&quot;</span><span class="p">)</span>
-    <span class="n">urls</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">a</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lyrics/&#39;</span> <span class="o">+</span> <span class="n">artist</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
-        <span class="n">lyrics</span> <span class="o">=</span> <span class="n">get_lyrics</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lyrics</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Esentially, what this wrapper does is provide a "search" function, where I can input an artist name, and it returns a list of urls of songs of that artist. It originally gave 100 songs, or 10 pages worth of results, but I decided to limit it to 10 songs. Genius.com has all the lyrics within a specific html tag, and I can just parse that using <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a>. This works for me, because at this point I really didn't want to get into the complicated syntax of html pages to parse these lyrics. If you're interested in learning more about scraping, check out BeautifulSoup and <a href="https://scrapy.org/">scrapy</a> (Use BeautifulSoup if you just want to get started with simple parsing, and use scrapy if you want something like a framework with more capabilities).</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Lets do some basic common-sense <strong>data cleaning</strong> for our lyrics. Looking at the lyrics, there are certain "section identifiers" like "Verse", "Chorus" which we do not need. I removed them using the following simple regular expression. I also removed the empty newlines, which may not make much difference, but it makes the lyrics a bit prettier (?) to look at.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lyrics/&#39;</span> <span class="o">+</span> <span class="n">artist</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="n">all_words</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">all_words</span> <span class="o">+=</span> <span class="n">this_sentence</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="c1">#remove identifiers like chorus, verse, etc</span>
-    <span class="n">all_words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\(\[].*?[\)\]]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">all_words</span><span class="p">)</span>
-    <span class="c1">#remove empty lines</span>
-    <span class="n">all_words</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_words</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span><span class="p">])</span>
+    &lt;span class="c1"&gt;#remove identifiers like chorus, verse, etc&lt;/span&gt;
+    &lt;span class="n"&gt;all_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;[\(\[].*?[\)\]]&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;all_words&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="c1"&gt;#remove empty lines&lt;/span&gt;
+    &lt;span class="n"&gt;all_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;linesep&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;all_words&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;splitlines&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
     
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lyrics/&#39;</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">&#39;-cleaned&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">all_words</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lyrics/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;-cleaned&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;all_words&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
-</div>
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following is the starting of "Creep" by Radiohead, before the data cleaning.</p>
-<blockquote><p>[Verse 1]<br>
-When you were here before<br>
-Couldn't look you in the eye<br>
-You're just like an angel<br>
-Your skin makes me cry<br>
-You float like a feather<br>
-In a beautiful world</p>
-<p>[Pre-Chorus]<br>
-I wish I was special<br>
-You're so fuckin' special</p>
-<p>[Chorus]</p>
-<p>But I'm a creep<br>
-I'm a weirdo<br>
-What the hell am I doing here?<br>
-I don't belong here</p>
-</blockquote>
-<p>And this is how it looks after the cleaning:</p>
-<blockquote><p>When you were here before<br>
-Couldn't look you in the eye<br>
-You're just like an angel<br>
-Your skin makes me cry<br>
-You float like a feather<br>
-In a beautiful world<br>
-I wish I was special<br>
-You're so fuckin' special<br>
-But I'm a creep<br>
-I'm a weirdo<br>
-What the hell am I doing here?<br>
-I don't belong here</p>
-</blockquote>
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;The following is the starting of "Creep" by Radiohead, before the data cleaning.&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;[Verse 1]&lt;br&gt;
+When you were here before&lt;br&gt;
+Couldn't look you in the eye&lt;br&gt;
+You're just like an angel&lt;br&gt;
+Your skin makes me cry&lt;br&gt;
+You float like a feather&lt;br&gt;
+In a beautiful world&lt;/p&gt;
+&lt;p&gt;[Pre-Chorus]&lt;br&gt;
+I wish I was special&lt;br&gt;
+You're so fuckin' special&lt;/p&gt;
+&lt;p&gt;[Chorus]&lt;/p&gt;
+&lt;p&gt;But I'm a creep&lt;br&gt;
+I'm a weirdo&lt;br&gt;
+What the hell am I doing here?&lt;br&gt;
+I don't belong here&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;And this is how it looks after the cleaning:&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;When you were here before&lt;br&gt;
+Couldn't look you in the eye&lt;br&gt;
+You're just like an angel&lt;br&gt;
+Your skin makes me cry&lt;br&gt;
+You float like a feather&lt;br&gt;
+In a beautiful world&lt;br&gt;
+I wish I was special&lt;br&gt;
+You're so fuckin' special&lt;br&gt;
+But I'm a creep&lt;br&gt;
+I'm a weirdo&lt;br&gt;
+What the hell am I doing here?&lt;br&gt;
+I don't belong here&lt;/p&gt;
+&lt;/blockquote&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Text-Analysis-and-Wordclouds">Text Analysis and Wordclouds<a class="anchor-link" href="#Text-Analysis-and-Wordclouds">&#182;</a></h2><p>Lets look at some metrics for each artist. First, we plot the number of words used by these artists in their 10 songs.</p>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h2 id="Text-Analysis-and-Wordclouds"&gt;Text Analysis and Wordclouds&lt;a class="anchor-link" href="#Text-Analysis-and-Wordclouds"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Lets look at some metrics for each artist. First, we plot the number of words used by these artists in their 10 songs.&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[30]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="k"&gt;matplotlib&lt;/span&gt; inline
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rcParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;figure.figsize&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="s1">&#39;words&#39;</span><span class="p">))</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lyrics/&#39;</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">&#39;-cleaned&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="n">num_words</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">all_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">num_words_this</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_sentence</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span>
-        <span class="n">num_words</span> <span class="o">+=</span> <span class="n">num_words_this</span>
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;words&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;artists&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lyrics/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;-cleaned&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;num_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;all_text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;readlines&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+        &lt;span class="n"&gt;this_sentence&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;num_words_this&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;this_sentence&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot; &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="n"&gt;num_words&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;num_words_this&lt;/span&gt;
 
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">num_words</span><span class="p">)</span>
-    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+    &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;num_words&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 
-<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;words&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Number of Words for each Artist&#39;</span><span class="p">);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
+&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;words&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Number of Words for each Artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
-</div>
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
 
 
+&lt;div class="output_area"&gt;
+
+&lt;div class="prompt"&gt;&lt;/div&gt;
 
 
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfYAAAHbCAYAAAA52bhUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+
+
+&lt;div class="output_png output_subarea "&gt;
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfYAAAHbCAYAAAA52bhUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3Xe8XFW5//HPlwQIvUYEEkhEFOklEFqoiiAqKqAiTaTo
 VX+AFfCqKEVBUBGsXLoiGBQFpXgjNRSBBJDONUCAUCT0Dkl4fn+sNcnkcFrOOTl7z5rv+/U6rzN7
 7b3nPDOZzLP3qooIzMzMrAwLVB2AmZmZDRwndjMzs4I4sZuZmRXEid3MzKwgTuxmZmYFcWI3MzMr
@@ -538,71 +474,71 @@ zHrBid2sjUnahlTdvllErAfcRqqSfz0iZvV0fkT8H7AhKcEfI+m78zFcM+sFJ3az9rYU8FxEvCpp
 DWDTLo57CViiY6GklYBXI+J3wAmkJN/l8WY2/7nznFl7uxz4gqR7gftJ1fGdORW4XNLjHTrDrQOc
 IOktYAbwXz0cb2bzmTvPmZmZFcRV8WZmZgVxYjczMyuIE7uZmVlBnNjNzMwK4sRuZmZWECd2MzOz
 gjixm5mZFcSJ3czMrCD/H7s3eaV4prAAAAAAAElFTkSuQmCC
-">
-</div>
+"&gt;
+&lt;/div&gt;
 
-</div>
+&lt;/div&gt;
 
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Well, <strong>Eminem</strong> has the highest number of words, by far, but we shouldn't rely on this metric alone because the length of these songs are different for different artists.</p>
-<p>A more useful metric is the <strong>vocabulary</strong>, or the number of unique words used by each artist. But that is still skewed by the length of a song. Dividing the number of words used with the vocabulary gives us a measure of the <strong>lexical richness</strong> of each artist (i.e., what proportion of the words used in the songs are distinct). Before measuring this metric, though, we need to do remove stop words (like 'the', 'or', 'and').</p>
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Well, &lt;strong&gt;Eminem&lt;/strong&gt; has the highest number of words, by far, but we shouldn't rely on this metric alone because the length of these songs are different for different artists.&lt;/p&gt;
+&lt;p&gt;A more useful metric is the &lt;strong&gt;vocabulary&lt;/strong&gt;, or the number of unique words used by each artist. But that is still skewed by the length of a song. Dividing the number of words used with the vocabulary gives us a measure of the &lt;strong&gt;lexical richness&lt;/strong&gt; of each artist (i.e., what proportion of the words used in the songs are distinct). Before measuring this metric, though, we need to do remove stop words (like 'the', 'or', 'and').&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[31]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;nltk.corpus&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;stopwords&lt;/span&gt;
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="s1">&#39;lexicalrichness&#39;</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lyrics/&#39;</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">&#39;-cleaned&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="n">all_words</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-    <span class="n">num_words</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">raw_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">raw_text</span> <span class="o">+=</span> <span class="n">this_sentence</span>
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;lexicalrichness&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;artists&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lyrics/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;-cleaned&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;all_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span class="n"&gt;num_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;raw_text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;readlines&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+        &lt;span class="n"&gt;this_sentence&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;raw_text&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;this_sentence&lt;/span&gt;
             
-    <span class="n">words</span> <span class="o">=</span> <span class="n">raw_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-    <span class="n">filtered_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;na&#39;</span><span class="p">,</span><span class="s1">&#39;la&#39;</span><span class="p">]]</span> <span class="c1"># remove the stopwords</span>
+    &lt;span class="n"&gt;words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;raw_text&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot; &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;filtered_words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;word&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;word&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;words&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;word&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;stopwords&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;words&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;english&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;word&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;word&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;na&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;la&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt; &lt;span class="c1"&gt;# remove the stopwords&lt;/span&gt;
     
-    <span class="n">a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">filtered_words</span><span class="p">))</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+    &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;filtered_words&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;words&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
     
-<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;lexicalrichness&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Lexical richness of each Artist&#39;</span><span class="p">);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    
-</pre></div>
+&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lexicalrichness&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Lexical richness of each Artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;    
+&lt;/pre&gt;&lt;/div&gt;
 
-</div>
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
 
 
+&lt;div class="output_area"&gt;
+
+&lt;div class="prompt"&gt;&lt;/div&gt;
 
 
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeQAAAHbCAYAAAAagumBAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+
+
+&lt;div class="output_png output_subarea "&gt;
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeQAAAHbCAYAAAAagumBAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3XmclXX9/vHXJaKguEuGQkJqmhKigeISmWZpWllqpmRW
 Ilr5SzO/Li1qaotLqy1quWbmkpXllkvmlimLuGsuYaKouIOKAr5/f9yfA4dhzpxhFu7PPXM9H495
 MOc+25thONd9f1ZFBGZmZlauZcouwMzMzBzIZmZmWXAgm5mZZcCBbGZmlgEHspmZWQYcyGZmZhlw
@@ -869,111 +805,111 @@ Ka6Mm7kX2FHSSZI+4D3FzcrnQDarIEnbUTRLbxURmwJ3UTRdz4mI+c2eHxH/ATanCOYTJR3TjeWa
 WTs4kM2qaRXgpYh4XdJGwJgGj5tFK/uHS1obeD0iLgBOoQjnho83s+7nQV1m1XQNcJCkB4GHKZqt
 W3MmcI2kp1sM0nofcIqkt4G5wJebPN7MupkHdZmZmWXATdZmZmYZcCCbmZllwIFsZmaWAQeymZlZ
 BhzIZmZmGXAgm5mZZcCBbGZmlgEHspmZWQb+P/njxFllKCmdAAAAAElFTkSuQmCC
-">
-</div>
+"&gt;
+&lt;/div&gt;
 
-</div>
+&lt;/div&gt;
 
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>It looks like Porcupine Tree, The Black Keys and Northlane use a higher variety of words in their lyrics compared to Damien Rice. Although Eminem uses a large number of words compared to the others, and his vocabulary size is also bigger, his lexical richness is average compared to some of the other artists.</p>
-<p>Now lets look at some of the interesting word clouds. This step doesn't have much of a purpose if you're not a fan of any of these artists, otherwise its interesting to look at the most commonly used words. I should also point out that the wordcloud library which I use, also aggregates multiple words together while considering the word frequencies, so you'll frequently see "2 word" combinations in them.</p>
-<p>Dire straits seem to use the word "chicks" a lot.</p>
-<p><img src="images/dire straits.png" alt="direstraits" style="width: 500px;" /></p>
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;It looks like Porcupine Tree, The Black Keys and Northlane use a higher variety of words in their lyrics compared to Damien Rice. Although Eminem uses a large number of words compared to the others, and his vocabulary size is also bigger, his lexical richness is average compared to some of the other artists.&lt;/p&gt;
+&lt;p&gt;Now lets look at some of the interesting word clouds. This step doesn't have much of a purpose if you're not a fan of any of these artists, otherwise its interesting to look at the most commonly used words. I should also point out that the wordcloud library which I use, also aggregates multiple words together while considering the word frequencies, so you'll frequently see "2 word" combinations in them.&lt;/p&gt;
+&lt;p&gt;Dire straits seem to use the word "chicks" a lot.&lt;/p&gt;
+&lt;p&gt;&lt;img src="images/dire straits.png" alt="direstraits" style="width: 500px;" /&gt;&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Eric clapton's word cloud is all about love, romance and Cocaine.</p>
-<p><img src="images/eric clapton.png" alt="direstraits" style="width: 500px;" /></p>
-<p>Northlane, a metal band, as expected, has more "negative" lyrics, dealing with isolation and loneliness and all that jazz.</p>
-<p><img src="images/Northlane.png" alt="direstraits" style="width: 500px;" /></p>
-<p>Radiohead's music seems to deal with a lot of broken hearts, truth and "mess" (I assume this has something to do with messy relationships?)</p>
-<p><img src="images/radiohead.png" alt="direstraits" style="width: 500px;" /></p>
-<p>Eminem is the only artists with visible profanities in the word cloud:</p>
-<p><img src="images/Eminem.png" alt="direstraits" style="width: 500px;" /></p>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Eric clapton's word cloud is all about love, romance and Cocaine.&lt;/p&gt;
+&lt;p&gt;&lt;img src="images/eric clapton.png" alt="direstraits" style="width: 500px;" /&gt;&lt;/p&gt;
+&lt;p&gt;Northlane, a metal band, as expected, has more "negative" lyrics, dealing with isolation and loneliness and all that jazz.&lt;/p&gt;
+&lt;p&gt;&lt;img src="images/Northlane.png" alt="direstraits" style="width: 500px;" /&gt;&lt;/p&gt;
+&lt;p&gt;Radiohead's music seems to deal with a lot of broken hearts, truth and "mess" (I assume this has something to do with messy relationships?)&lt;/p&gt;
+&lt;p&gt;&lt;img src="images/radiohead.png" alt="direstraits" style="width: 500px;" /&gt;&lt;/p&gt;
+&lt;p&gt;Eminem is the only artists with visible profanities in the word cloud:&lt;/p&gt;
+&lt;p&gt;&lt;img src="images/Eminem.png" alt="direstraits" style="width: 500px;" /&gt;&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Sentiment-Analysis">Sentiment Analysis<a class="anchor-link" href="#Sentiment-Analysis">&#182;</a></h2><p>Now, we'll use sentiment analysis to describe what proportion of lyrics of these artists are positive, negative or neutral. I was initially using the <a href="https://textblob.readthedocs.io/en/dev/index.html">TextBlob</a> library, which is built on top of <a href="http://www.nltk.org/">NLTK</a> (also known as the Natural Language Toolkit). While searching around these NLP frameworks, I used the following simple test : whether the library is able to distinguish between the following two sentences:</p>
-<blockquote><p>I'm feeling good</p>
-<p>I'm feeling so good</p>
-</blockquote>
-<p>Ideally, the library should be able infer that the second statement is "more" positive. I tried this on both TextBlob and NLTK's <a href="https://github.com/cjhutto/vaderSentiment">Vader Sentiment analyzer</a>. TextBlob did not give any difference, while Vader passed the test. Of course, which one is a "better" library to use is totally based on your use case, and I'm sure that TextBlob does some things much better than NLTK.</p>
-<p>NLTK's sentiment analyzer gives a normalized unidimensional metric of sentiment of a given sentence. This value can be thresholded to determine whether the sentence is considered positive, negative, or neutral.</p>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h2 id="Sentiment-Analysis"&gt;Sentiment Analysis&lt;a class="anchor-link" href="#Sentiment-Analysis"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Now, we'll use sentiment analysis to describe what proportion of lyrics of these artists are positive, negative or neutral. I was initially using the &lt;a href="https://textblob.readthedocs.io/en/dev/index.html"&gt;TextBlob&lt;/a&gt; library, which is built on top of &lt;a href="http://www.nltk.org/"&gt;NLTK&lt;/a&gt; (also known as the Natural Language Toolkit). While searching around these NLP frameworks, I used the following simple test : whether the library is able to distinguish between the following two sentences:&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;I'm feeling good&lt;/p&gt;
+&lt;p&gt;I'm feeling so good&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Ideally, the library should be able infer that the second statement is "more" positive. I tried this on both TextBlob and NLTK's &lt;a href="https://github.com/cjhutto/vaderSentiment"&gt;Vader Sentiment analyzer&lt;/a&gt;. TextBlob did not give any difference, while Vader passed the test. Of course, which one is a "better" library to use is totally based on your use case, and I'm sure that TextBlob does some things much better than NLTK.&lt;/p&gt;
+&lt;p&gt;NLTK's sentiment analyzer gives a normalized unidimensional metric of sentiment of a given sentence. This value can be thresholded to determine whether the sentence is considered positive, negative, or neutral.&lt;/p&gt;
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.sentiment.vader</span> <span class="kn">import</span> <span class="n">SentimentIntensityAnalyzer</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">,</span> <span class="s1">&#39;neu&#39;</span><span class="p">,</span> <span class="s1">&#39;neg&#39;</span><span class="p">))</span>
-<span class="n">sid</span> <span class="o">=</span> <span class="n">SentimentIntensityAnalyzer</span><span class="p">()</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">for</span> <span class="n">artist</span> <span class="ow">in</span> <span class="n">artists</span><span class="p">:</span>
-    <span class="n">num_positive</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">num_negative</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">num_neutral</span> <span class="o">=</span> <span class="mi">0</span>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[45]:&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+    &lt;div class="input_area"&gt;
+&lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;nltk.sentiment.vader&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;SentimentIntensityAnalyzer&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pos&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;neu&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;neg&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;sid&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;SentimentIntensityAnalyzer&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;artists&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;num_positive&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;num_negative&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;num_neutral&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
 
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lyrics/&#39;</span> <span class="o">+</span> <span class="n">artist</span> <span class="o">+</span> <span class="s1">&#39;-cleaned&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-        <span class="n">this_sentence</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">comp</span> <span class="o">=</span> <span class="n">sid</span><span class="o">.</span><span class="n">polarity_scores</span><span class="p">(</span><span class="n">this_sentence</span><span class="p">)</span>
-        <span class="n">comp</span> <span class="o">=</span> <span class="n">comp</span><span class="p">[</span><span class="s1">&#39;compound&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">comp</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">:</span>
-            <span class="n">num_positive</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">comp</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">0.5</span> <span class="ow">and</span> <span class="n">comp</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
-            <span class="n">num_neutral</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">num_negative</span> <span class="o">+=</span> <span class="mi">1</span>
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;lyrics/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;artist&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;-cleaned&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;readlines&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+        &lt;span class="n"&gt;this_sentence&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;comp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sid&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;polarity_scores&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;this_sentence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;comp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;comp&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;compound&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;comp&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;num_positive&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;comp&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;comp&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;num_neutral&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;num_negative&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
 
-    <span class="n">num_total</span> <span class="o">=</span> <span class="n">num_negative</span> <span class="o">+</span> <span class="n">num_neutral</span> <span class="o">+</span> <span class="n">num_positive</span>
-    <span class="n">percent_negative</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_negative</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">num_total</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span>
-    <span class="n">percent_neutral</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_neutral</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">num_total</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span>
-    <span class="n">percent_positive</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_positive</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">num_total</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">percent_positive</span><span class="p">,</span> <span class="n">percent_neutral</span><span class="p">,</span> <span class="n">percent_negative</span><span class="p">)</span>
-    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+    &lt;span class="n"&gt;num_total&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;num_negative&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;num_neutral&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;num_positive&lt;/span&gt;
+    &lt;span class="n"&gt;percent_negative&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_negative&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_total&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;
+    &lt;span class="n"&gt;percent_neutral&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_neutral&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_total&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;
+    &lt;span class="n"&gt;percent_positive&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_positive&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;num_total&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;
+    &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;loc&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;artist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;percent_positive&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;percent_neutral&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;percent_negative&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
                  
-<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>          
-</pre></div>
+&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;artist&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;stacked&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;          
+&lt;/pre&gt;&lt;/div&gt;
 
-</div>
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
 
 
+&lt;div class="output_area"&gt;
+
+&lt;div class="prompt"&gt;&lt;/div&gt;
 
 
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeoAAAHOCAYAAABXUEoaAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+
+
+&lt;div class="output_png output_subarea "&gt;
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeoAAAHOCAYAAABXUEoaAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAALEgAACxIB0t1+/AAAIABJREFUeJzt3Xu8rvWc//HXu5OdztiaUilJiYqEjBxjJudT5RAaIsYp
 jONgMHJoGCYxaKTJuXLKMSohp+hASfoVQtSUKJHUrs/vj+ta7dVqHfbea699fe97v56Px37sdV/r
 vu/1qcfa9/u6vtf3+/mmqpAkSW1aY+gCJEnSzAxqSZIaZlBLktQwg1qSpIYZ1JIkNcygliSpYQa1
@@ -1197,101 +1133,101 @@ S2MkyQPphrfvU1W7AGfSDYFfU1XXz/X6qvp/wK50gX1wkn9bwHIlLQODWhovGwF/rKqrk+wA7D7D
 865imv3bk2wOXF1VHwXeThfaMz5f0sJzMpk0Xo4HnpvkXOA8uuHv6RwOHJ/kd1Mmh+0EvD3JDcB1
 wD/P8XxJC8zJZJIkNcyhb0mSGmZQS5LUMINakqSGGdSSJDXMoJYkqWEGtSRJDTOoJUlqmEEtSVLD
 /j9ckN09Z7sPBAAAAABJRU5ErkJggg==
-">
-</div>
+"&gt;
+&lt;/div&gt;
 
-</div>
+&lt;/div&gt;
 
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<table>
-<thead><tr>
-<th>Artist</th>
-<th>Neg</th>
-<th>Neutral</th>
-<th>Pos</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Cigarettes After Sex &nbsp;&nbsp;&nbsp;</td>
-<td>3.5   &nbsp;&nbsp;</td>
-<td>86.3 &nbsp;&nbsp;</td>
-<td>10.1 &nbsp;&nbsp;</td>
-</tr>
-<tr>
-<td>Eric Clapton</td>
-<td>2.2</td>
-<td>80.0</td>
-<td>17.8</td>
-</tr>
-<tr>
-<td>Damien Rice</td>
-<td>6.1</td>
-<td>87.6</td>
-<td>6.3</td>
-</tr>
-<tr>
-<td>Dire Straits</td>
-<td>5.2</td>
-<td>84.2</td>
-<td>10.6</td>
-</tr>
-<tr>
-<td>The Black Keys</td>
-<td>6.9</td>
-<td>85.4</td>
-<td>7.7</td>
-</tr>
-<tr>
-<td>Eminem</td>
-<td>12.6</td>
-<td>80.1</td>
-<td>7.3</td>
-</tr>
-<tr>
-<td>Porcupine tree</td>
-<td>3.5</td>
-<td>89.9</td>
-<td>6.7</td>
-</tr>
-<tr>
-<td>Northlane</td>
-<td>8.3</td>
-<td>88.3</td>
-<td>3.4</td>
-</tr>
-<tr>
-<td>Incubus</td>
-<td>3.4</td>
-<td>83.2</td>
-<td>13.5</td>
-</tr>
-<tr>
-<td>Radiohead</td>
-<td>9.9</td>
-<td>83.0</td>
-<td>7.1</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Negative-lyrics">Negative lyrics<a class="anchor-link" href="#Negative-lyrics">&#182;</a></h3><p><strong>Eminem</strong> wins the negative lyrics contest (not surprisingly), with 12.6% of his lyrics being negative. <strong>Radiohead</strong> comes in second, with 9.9%. <strong>Eric Clapton</strong> has the least negative lyrics, at 2.2%. One surprise is <strong>Porcupine tree</strong>, at 3.5%, considering how sad their lyrics can be. This has led me to hypothesize that <strong>aggression seems to be a much more negative emotion compared to sadness</strong> (since Eminem has much more negative lyrics than Porcupine Tree). Radiohead seems to have both a decent amount of aggression as well as sadness. Of course, all this analysis and hypothesizing is subject to the 10 songs of these artists, and any generalizations made here should be taken with a grain of salt.</p>
-<h3 id="Positive-lyrics">Positive lyrics<a class="anchor-link" href="#Positive-lyrics">&#182;</a></h3><p><strong>Eric Clapton</strong> wins this one at 17.8%. He also had the least percentage of negative lyrics. Conclusion : his lyrics are generally much more "happier" than the rest. <strong>Incubus</strong> comes in second at 13.4%. <strong>Northlane</strong> comes in last at 3.4% (validating the metal music stereotype). I would say, overall, Northlane and Eminem are tied at having the "least happiest" lyrics.</p>
-<h2 id="That&#x27;s-it-for-now!">That's it for now!<a class="anchor-link" href="#That&#x27;s-it-for-now!">&#182;</a></h2><p>Of course, a lot more can be done with this topic, but a wise man once told me that one should know when to stop. I would love to know what you thought of my analysis (no doubt, you'll have strong feelings if you're fans of any of these artists). What other metrics could I have looked at? Let me know in the comments below!</p>
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;table&gt;
+&lt;thead&gt;&lt;tr&gt;
+&lt;th&gt;Artist&lt;/th&gt;
+&lt;th&gt;Neg&lt;/th&gt;
+&lt;th&gt;Neutral&lt;/th&gt;
+&lt;th&gt;Pos&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Cigarettes After Sex &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;3.5   &amp;nbsp;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;86.3 &amp;nbsp;&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;10.1 &amp;nbsp;&amp;nbsp;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Eric Clapton&lt;/td&gt;
+&lt;td&gt;2.2&lt;/td&gt;
+&lt;td&gt;80.0&lt;/td&gt;
+&lt;td&gt;17.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Damien Rice&lt;/td&gt;
+&lt;td&gt;6.1&lt;/td&gt;
+&lt;td&gt;87.6&lt;/td&gt;
+&lt;td&gt;6.3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Dire Straits&lt;/td&gt;
+&lt;td&gt;5.2&lt;/td&gt;
+&lt;td&gt;84.2&lt;/td&gt;
+&lt;td&gt;10.6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;The Black Keys&lt;/td&gt;
+&lt;td&gt;6.9&lt;/td&gt;
+&lt;td&gt;85.4&lt;/td&gt;
+&lt;td&gt;7.7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Eminem&lt;/td&gt;
+&lt;td&gt;12.6&lt;/td&gt;
+&lt;td&gt;80.1&lt;/td&gt;
+&lt;td&gt;7.3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Porcupine tree&lt;/td&gt;
+&lt;td&gt;3.5&lt;/td&gt;
+&lt;td&gt;89.9&lt;/td&gt;
+&lt;td&gt;6.7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Northlane&lt;/td&gt;
+&lt;td&gt;8.3&lt;/td&gt;
+&lt;td&gt;88.3&lt;/td&gt;
+&lt;td&gt;3.4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Incubus&lt;/td&gt;
+&lt;td&gt;3.4&lt;/td&gt;
+&lt;td&gt;83.2&lt;/td&gt;
+&lt;td&gt;13.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Radiohead&lt;/td&gt;
+&lt;td&gt;9.9&lt;/td&gt;
+&lt;td&gt;83.0&lt;/td&gt;
+&lt;td&gt;7.1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="Negative-lyrics"&gt;Negative lyrics&lt;a class="anchor-link" href="#Negative-lyrics"&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Eminem&lt;/strong&gt; wins the negative lyrics contest (not surprisingly), with 12.6% of his lyrics being negative. &lt;strong&gt;Radiohead&lt;/strong&gt; comes in second, with 9.9%. &lt;strong&gt;Eric Clapton&lt;/strong&gt; has the least negative lyrics, at 2.2%. One surprise is &lt;strong&gt;Porcupine tree&lt;/strong&gt;, at 3.5%, considering how sad their lyrics can be. This has led me to hypothesize that &lt;strong&gt;aggression seems to be a much more negative emotion compared to sadness&lt;/strong&gt; (since Eminem has much more negative lyrics than Porcupine Tree). Radiohead seems to have both a decent amount of aggression as well as sadness. Of course, all this analysis and hypothesizing is subject to the 10 songs of these artists, and any generalizations made here should be taken with a grain of salt.&lt;/p&gt;
+&lt;h3 id="Positive-lyrics"&gt;Positive lyrics&lt;a class="anchor-link" href="#Positive-lyrics"&gt;&amp;#182;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Eric Clapton&lt;/strong&gt; wins this one at 17.8%. He also had the least percentage of negative lyrics. Conclusion : his lyrics are generally much more "happier" than the rest. &lt;strong&gt;Incubus&lt;/strong&gt; comes in second at 13.4%. &lt;strong&gt;Northlane&lt;/strong&gt; comes in last at 3.4% (validating the metal music stereotype). I would say, overall, Northlane and Eminem are tied at having the "least happiest" lyrics.&lt;/p&gt;
+&lt;h2 id="That&amp;#x27;s-it-for-now!"&gt;That's it for now!&lt;a class="anchor-link" href="#That&amp;#x27;s-it-for-now!"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Of course, a lot more can be done with this topic, but a wise man once told me that one should know when to stop. I would love to know what you thought of my analysis (no doubt, you'll have strong feelings if you're fans of any of these artists). What other metrics could I have looked at? Let me know in the comments below!&lt;/p&gt;
 
-</div>
-</div>
-</div>
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
  
 
 
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
@@ -1318,67 +1254,5 @@ wD/P8XxJC8zJZJIkNcyhb0mSGmZQS5LUMINakqSGGdSSJDXMoJYkqWEGtSRJDTOoJUlqmEEtSVLD
         "}); ";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script>
-
-            <a href="#" class="go-top">Go Top</a>
-    <div class="comments">
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    </div>
-<footer class="footer">
-    <p>&copy; Karanveer Singh &ndash;
-        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
-        for <a href="http://blog.getpelican.com/">Pelican</a>
-    </p>
-</footer>        </div>
-    </div>
-    </div>
-    <script>
-        var $top = $('.go-top');
-
-        // Show or hide the sticky footer button
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > 200) {
-                $top.fadeIn(200);
-            } else {
-                $top.fadeOut(200);
-            }
-        });
-
-        // Animate the scroll to top
-        $top.click(function(event) {
-            event.preventDefault();
-            $('html, body').animate({scrollTop: 0}, 300);
-        })
-
-        // Makes sure that the href="#" attached to the <a> elements
-        // don't scroll you back up the page.
-        $('body').on('click', 'a[href="#"]', function(event) {
-            event.preventDefault();
-        });
-    </script>
-    <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-        try {
-            var pageTracker = _gat._getTracker("UA-41437726-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-    </script>
-
-</body>
-</html>
+&lt;/script&gt;
+</summary><category term="python"></category><category term="pandas"></category><category term="music"></category><category term="NLP"></category></entry></feed>
