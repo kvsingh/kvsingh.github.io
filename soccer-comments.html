@@ -8,7 +8,7 @@
         <link rel="alternate"  href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
         <link rel="alternate" href="https://kvsingh.github.io/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
 
-        <title>Music recommendation based on topic modelling of lyrics // UnInhibited Zombie // </title>
+        <title>Analyzing soccer comments // UnInhibited Zombie // </title>
 
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
@@ -54,7 +54,7 @@
         <div class="content">
             <section class="post">
                 <header class="post-header">
-                    <h1>Music recommendation based on topic modelling of lyrics</h1>
+                    <h1>Analyzing soccer comments</h1>
                         <p class="post-meta">
                             // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
                                 <a class="post-category" href="https://kvsingh.github.io/tag/scikit-learn.html">scikit-learn</a>
@@ -1039,62 +1039,24 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Looking up lyrics of a song, and trying to relate them to our own lives is something a lot of us have done. I have been doing that a lot this year. Often, I would go to this website called <a href="www.songmeanings.com">songmeanings.com</a>, and look at the interpretations of a song's lyrics given by other people. In the end, after I'm done with a song, I end up longing for more songs based on the same "topic". Now, this belongs to the area of "subjective recommendations". Over the years, I have tried all sorts of recommendation methods - including but not limited to - Spotify radio, Reddit's <a href="reddit.com/r/ifyoulikeblank/">ifyoulikeblank</a>, asking friends, to pure googling. And I've always wondered how cool it would be to have a program which does this, customized for my style, rather than going through a manual process of these four methods.</p>
-<p>Well, the obvious question is - why not just use Spotify's Discover weekly recommendations? After all, that is supposed to be one of the best in the business. But, that is a problem, because Spotify apparently uses 3 different methods - [list methods] and this blog post is based on only one of them - lyrics.</p>
-<p>This post consists of 3 parts - Data collection and preprocessing,</p>
-<h2 id="Data-collection-and-preprocessing">Data collection and preprocessing<a class="anchor-link" href="#Data-collection-and-preprocessing">&#182;</a></h2><p>I have discussed in detail about getting lyrics of artists from Genius' API on my previous <a href="https://kvsingh.github.io/lyrics-sentiment-analysis.html">blog post on sentiment analysis of music lyrics</a>. 
-For preprocessing our text data, we will be doing a number of basic NLP related cleaning techniques, customized for our particular domain.</p>
-<p>Here are the data preprocessing steps:</p>
-<ul>
-<li>Remove song section identifiers (like "[Verse]", "[Chorus]", etc)</li>
-<li>Tokenize and convert to lowercase</li>
-<li>Remove punctuation</li>
-<li>Lemmatize</li>
-<li>Remove "common" words</li>
-</ul>
+<p><a href="https://www.reddit.com/r/soccer/">/r/soccer</a> is my most frequented subreddit. I don't have stats to back that up so you'll have to take my word for it. In general, football subreddits and online forums are a gold mine for analyzing behaviour of fans. One could think of a subreddit as a "superorganism", having its own set of internally conflicting opinions and ideas. This is the motivation behind this blog post - analyzing fan behaviour by looking at comments on reddit's subreddits. I consider 5 subreddits (forums) - /r/soccer (the subreddit frequented by fans of all teams), /r/reddevils, /r/liverpoolfc, /r/chelseafc and /r/gunners (corresponding to fan subreddits for Manchester United, Liverpool, Chelsea and Arsenal).</p>
+<h2 id="Getting-the-Data">Getting the Data<a class="anchor-link" href="#Getting-the-Data">&#182;</a></h2><p>Thanks to <a href="https://praw.readthedocs.io/en/latest/">python's reddit API wrapper</a>, getting comments data from reddit is easier than ever. <a href="https://github.com/kvsingh/soccer-comments/blob/master/get_data.py">Here</a> is the link to the code for getting the comments using praw, and writing it to a pickle object.</p>
+<p>Let's find out some basic information about the data.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">clean_raw_data</span><span class="p">(</span><span class="n">raw_text</span><span class="p">):</span>
-    <span class="c1">#remove section identifiers</span>
-    <span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\(\[].*?[\)\]]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">raw_text</span><span class="p">)</span>
-    <span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cleaned_text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">cleaned_text</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>After this, we "tokenize" the words (a process of splitting the text into smaller chunks). Consider the following lyrics from Eminem's "Lose Yourself".</p>
-<blockquote><p>There's vomit on his sweater already: Mom's spaghetti</p>
-</blockquote>
-<p>This gets split into:</p>
-<blockquote><p>['There', "'s", 'vomit', 'on', 'his', 'sweater', 'already', ':', 'Mom', "'s", 'spaghetti']</p>
-</blockquote>
-<p>We also convert the text to lowercase.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">tokens</span> <span class="o">=</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="n">subreddits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;soccer&quot;</span><span class="p">,</span> <span class="s2">&quot;liverpoolfc&quot;</span><span class="p">,</span> <span class="s2">&quot;Gunners&quot;</span><span class="p">,</span> <span class="s2">&quot;reddevils&quot;</span><span class="p">,</span> <span class="s2">&quot;chelseafc&quot;</span><span class="p">]</span>
+<span class="n">all_comments</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">subreddit</span> <span class="ow">in</span> <span class="n">subreddits</span><span class="p">:</span>
+    <span class="n">all_comments</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;reddit-top-1000-post-comments-&quot;</span> <span class="o">+</span> <span class="n">subreddit</span> <span class="o">+</span> <span class="s2">&quot;.p&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+    <span class="k">print</span> <span class="n">subreddit</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_comments</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]),</span> <span class="s2">&quot;comments&quot;</span>
 </pre></div>
 
 </div>
@@ -1110,15 +1072,13 @@ For preprocessing our text data, we will be doing a number of basic NLP related 
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-1-5420fd7959ee&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>tokens <span class="ansi-blue-fg">=</span> word_tokenize<span class="ansi-blue-fg">(</span>text<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> tokens <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>t<span class="ansi-blue-fg">.</span>lower<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> t <span class="ansi-green-fg">in</span> tokens<span class="ansi-blue-fg">]</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;word_tokenize&#39; is not defined</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>soccer : 39005 comments
+liverpoolfc : 7363 comments
+Gunners : 6462 comments
+reddevils : 6606 comments
+chelseafc : 4617 comments
+</pre>
 </div>
 </div>
 
@@ -1130,7 +1090,75 @@ For preprocessing our text data, we will be doing a number of basic NLP related 
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now, remove the punctuation and lemmatize the tokens.</p>
+<h2 id="Data-Cleaning">Data Cleaning<a class="anchor-link" href="#Data-Cleaning">&#182;</a></h2><p>Comments on reddit are full of weird types of symbols and unicode characters. I spent some time trying to figure out the common characters/words which are irrelevant to our analysis. Any kind of text analysis will involve some customized study of our domain to figure out what characters/words we need to remove.</p>
+<p>First, we need to remove unicode characters (internet forums are full of these). In addition, reddit stores "[removed]" as the comment for deleted comments. We also remove "\n" (newline character) and "'s" (I got the idea to remove this particular suffix by going through the code of <a href="https://github.com/amueller/word_cloud">WordCloud</a> module.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+<span class="n">comments_modified</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">subreddit</span> <span class="ow">in</span> <span class="n">subreddits</span><span class="p">:</span>
+    <span class="n">this_comments_modified</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">all_comments</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]:</span>
+        <span class="n">comment_mod</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">comment</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="n">comment_mod</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">comment_mod</span><span class="p">)</span>
+        <span class="n">comment_mod</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">comment_mod</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">comment_mod</span> <span class="o">!=</span> <span class="s2">&quot;[removed]&quot;</span><span class="p">:</span>
+            <span class="n">this_comments_modified</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">comment_mod</span><span class="p">,</span> <span class="n">comment</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">comments_modified</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_comments_modified</span>
+    <span class="k">print</span> <span class="n">subreddit</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">comments_modified</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]),</span> <span class="s2">&quot;comments&quot;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>soccer : 38994 comments
+liverpoolfc : 7333 comments
+Gunners : 6400 comments
+reddevils : 6604 comments
+chelseafc : 4601 comments
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As an example, the following comment:</p>
+<blockquote><p>Palace fan here\n. Well done. \U0001f44f\U0001f3fc\U0001f44f\U0001f3fc</p>
+</blockquote>
+<p>Gets modified to :</p>
+<blockquote><p>Palace fan here. Well done.</p>
+</blockquote>
+<p>For any sort of analysis, we will need to "tokenize" the comments, i.e., identify the important words in each comment, and transform them into a form which can be used by your classfiers/analyzers. This varies according to the domain you are working on. For the purpose of our use case, we will be performing the following steps:</p>
+<ul>
+<li>Tokenize words</li>
+<li>Lemmatization, or identifying the root of the word</li>
+<li>Eliminating stop words and punctuation</li>
+</ul>
 
 </div>
 </div>
@@ -1140,60 +1168,31 @@ For preprocessing our text data, we will be doing a number of basic NLP related 
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#remove punctuation</span>
-<span class="n">translate_table</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span>
-<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">translate_table</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
-<span class="n">tokens</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">comment_tokens</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">WordNetLemmatizer</span>
+<span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="kn">import</span> <span class="n">word_tokenize</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 
 <span class="n">wordnet_lemmatizer</span> <span class="o">=</span> <span class="n">WordNetLemmatizer</span><span class="p">()</span>
-<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">wordnet_lemmatizer</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">subreddit</span> <span class="ow">in</span> <span class="n">subreddits</span><span class="p">:</span>
+    <span class="n">comments</span> <span class="o">=</span> <span class="n">comments_modified</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]</span>
+    <span class="n">this_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">comments</span><span class="p">:</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="n">comment</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">wordnet_lemmatizer</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">),</span> <span class="n">tokens</span><span class="p">)</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
+        <span class="n">this_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>        
+    <span class="n">comment_tokens</span><span class="p">[</span><span class="n">subreddit</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_tokens</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">comment_tokens</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;comment_tokens.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now, we remove stop words (which are commonly occuring words in the english language), because these do not contribute  to a particular topic, but may show up because of the fact that they occur a lot. We also remove tokens with less than or equal to 2 characters. The list of stopwords used is given on <a href="https://gist.github.com/sebleier/554280">this link</a>.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">tokens</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
-<span class="n">tokens</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">),</span> <span class="n">tokens</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In addition to the english stopwords, there are other common words which are specific to our domain (song lyrics). How do we find such words? I decided to remove the 50 most commonly occuring words in our lyrics corpus.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I played around with different orders for the rest of the steps. Initially, I tried removing the punctuation before tokenization. This led to a situation, where words would lose their inherent structure, and some stop words would not get removed. Consider the following example: The word "I'm". If we remove punctuation before tokenizing, it gets reduced to "Im". The lemmatization process doesn't really change this word, and finally, it is not detected in the stop words, leading to it being a prominent word in the topics. To fix this, I tokenize first. "I'm" gets split into "I", "'" and "m". Removing punctuation leads to removal of the token "'". Farther, "I" gets recognized as a stopword (and "m" gets removed when I remove all tokens which contain less than or equal to two characters).</p>
-
-</div>
-</div>
 </div>
  
 

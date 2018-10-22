@@ -1,44 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-          <title>UnInhibited Zombie</title>
-        <meta charset="utf-8" />
-        <link href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="UnInhibited Zombie Full Atom Feed" />
-        <link href="http://localhost:8000/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="UnInhibited Zombie Full RSS Feed" />
-        <link href="http://localhost:8000/feeds/nlp-sentiment-analysis-music.atom.xml" type="application/atom+xml" rel="alternate" title="UnInhibited Zombie Categories Atom Feed" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UnInhibited Zombie, ">
+
+        <link rel="alternate"  href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
+        <link rel="alternate" href="https://kvsingh.github.io/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
+
+        <title>Sentiment Analysis on lyrics of popular music artists // UnInhibited Zombie // </title>
 
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pure.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pygments.css">
 
-    <meta name="tags" content="python" />
-    <meta name="tags" content="pandas" />
-    <meta name="tags" content="music" />
-    <meta name="tags" content="NLP" />
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
 </head>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://kvsingh.github.io/">UnInhibited Zombie <strong></strong></a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-        </ul></nav><!-- /#menu -->
-<section id="content" class="body">
-  <header>
-    <h2 class="entry-title">
-      <a href="https://kvsingh.github.io/lyrics-sentiment-analysis.html" rel="bookmark"
-         title="Permalink to Sentiment Analysis on lyrics of popular music artists">Sentiment Analysis on lyrics of popular music artists</a></h2>
- 
-  </header>
-  <footer class="post-info">
-    <abbr class="published" title="2017-10-03T21:00:00+05:30">
-      Tue 03 October 2017
-    </abbr>
-    <address class="vcard author">
-      By           <a class="url fn" href="https://kvsingh.github.io/author/karanveer-singh.html">Karanveer Singh</a>
-    </address>
-  </footer><!-- /.post-info -->
-  <div class="entry-content">
-    <style type="text/css">/*!
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="https://kvsingh.github.io">UnInhibited Zombie</a></h1>
+                            <p class="tagline"></p>
+                                <p class="social">
+                                    <a href="https://github.com/kvsingh/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://soundcloud.com/unzombie">
+                                        <i class="fa fa-soundcloud fa-3x"></i>
+                                    </a>
+                                    <a href="https://kvsingh.github.io/feeds/all.rss.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                </p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Sentiment Analysis on lyrics of popular music artists</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/music.html">music</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/nlp.html">NLP</a>
+                        </p>
+                </header>
+            </section>
+            <style type="text/css">/*!
 *
 * IPython notebook
 *
@@ -1046,7 +1071,7 @@ h6:hover .anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">search</span> <span class="kn">import</span> <span class="n">search</span>
@@ -1076,33 +1101,6 @@ h6:hover .anchor-link {
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-1-b9669c5a6ebf&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> search <span class="ansi-green-fg">import</span> search
-<span class="ansi-green-intense-fg ansi-bold">      2</span> outputfilename <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;lyrics.csv&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> artists <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;cigarettes after sex&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;eric clapton&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;damien rice&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;dire straits&#34;</span><span class="ansi-blue-fg">,</span>            <span class="ansi-blue-fg">&#34;the black keys&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;Eminem&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;Porcupine tree&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;Northlane&#34;</span><span class="ansi-blue-fg">,</span>            <span class="ansi-blue-fg">&#34;incubus&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;radiohead&#34;</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> 
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">def</span> get_lyrics<span class="ansi-blue-fg">(</span>url<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">ImportError</span>: No module named search</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -2296,13 +2294,65 @@ wD/P8XxJC8zJZJIkNcyhb0mSGmZQS5LUMINakqSGGdSSJDXMoJYkqWEGtSRJDTOoJUlqmEEtSVLD
 }
 </script>
 
-  </div><!-- /.entry-content -->
-</section>
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Karanveer Singh &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-41437726-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
 </body>
 </html>

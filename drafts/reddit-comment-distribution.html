@@ -1,44 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-          <title>UnInhibited Zombie</title>
-        <meta charset="utf-8" />
-        <link href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="UnInhibited Zombie Full Atom Feed" />
-        <link href="http://localhost:8000/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="UnInhibited Zombie Full RSS Feed" />
-        <link href="http://localhost:8000/feeds/data-analysis.atom.xml" type="application/atom+xml" rel="alternate" title="UnInhibited Zombie Categories Atom Feed" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UnInhibited Zombie, ">
+
+        <link rel="alternate"  href="https://kvsingh.github.io/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
+        <link rel="alternate" href="https://kvsingh.github.io/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
+
+        <title>Analyzing the relationship between reddit comment distribution and subreddits // UnInhibited Zombie // </title>
 
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pure.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pygments.css">
 
-    <meta name="tags" content="python" />
-    <meta name="tags" content="pandas" />
-    <meta name="tags" content="data-analysis" />
-    <meta name="tags" content="reddit" />
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
 </head>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://kvsingh.github.io/">UnInhibited Zombie <strong></strong></a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-        </ul></nav><!-- /#menu -->
-<section id="content" class="body">
-  <header>
-    <h2 class="entry-title">
-      <a href="https://kvsingh.github.io/drafts/reddit-comment-distribution.html" rel="bookmark"
-         title="Permalink to Analyzing the relationship between reddit comment distribution and subreddits">Analyzing the relationship between reddit comment distribution and subreddits</a></h2>
- 
-  </header>
-  <footer class="post-info">
-    <abbr class="published" title="2017-07-31T21:00:00+05:30">
-      Mon 31 July 2017
-    </abbr>
-    <address class="vcard author">
-      By           <a class="url fn" href="https://kvsingh.github.io/author/karanveer-singh.html">Karanveer Singh</a>
-    </address>
-  </footer><!-- /.post-info -->
-  <div class="entry-content">
-    <style type="text/css">/*!
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <h1 class="brand-main"><a href="https://kvsingh.github.io">UnInhibited Zombie</a></h1>
+                            <p class="tagline"></p>
+                                <p class="social">
+                                    <a href="https://github.com/kvsingh/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://soundcloud.com/unzombie">
+                                        <i class="fa fa-soundcloud fa-3x"></i>
+                                    </a>
+                                    <a href="https://kvsingh.github.io/feeds/all.rss.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                </p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Analyzing the relationship between reddit comment distribution and subreddits</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/data-analysis.html">data-analysis</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/reddit.html">reddit</a>
+                        </p>
+                </header>
+            </section>
+            <style type="text/css">/*!
 *
 * IPython notebook
 *
@@ -1394,13 +1419,65 @@ dtype: int64
 }
 </script>
 
-  </div><!-- /.entry-content -->
-</section>
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Karanveer Singh &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-41437726-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
 </body>
 </html>
