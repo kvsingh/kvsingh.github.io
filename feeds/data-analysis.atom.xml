@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>UnInhibited Zombie</title><link href="https://kvsingh.github.io/" rel="alternate"></link><link href="https://kvsingh.github.io/feeds/data-analysis.atom.xml" rel="self"></link><id>https://kvsingh.github.io/</id><updated>2018-10-20T21:00:00+05:30</updated><entry><title>Analyzing the evolution of Linkin Park's music over the years</title><link href="https://kvsingh.github.io/lp-music.html" rel="alternate"></link><updated>2018-10-20T21:00:00+05:30</updated><author><name>Karanveer Singh</name></author><id>tag:kvsingh.github.io,2018-10-20:lp-music.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>UnInhibited Zombie</title><link href="https://kvsingh.github.io/" rel="alternate"></link><link href="http://localhost:8000/feeds/data-analysis.atom.xml" rel="self"></link><id>https://kvsingh.github.io/</id><updated>2018-10-20T21:00:00+05:30</updated><entry><title>Analyzing the evolution of Linkin Park's music over the years</title><link href="https://kvsingh.github.io/lp-music.html" rel="alternate"></link><updated>2018-10-20T21:00:00+05:30</updated><author><name>Karanveer Singh</name></author><id>tag:kvsingh.github.io,2018-10-20:lp-music.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -975,18 +975,9 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;Like a majority of urban teenagers, &lt;a href="https://www.youtube.com/channel/UCZU9T1ceaOgwfLRq7OKFU4Q"&gt;Linkin Park&lt;/a&gt; was one of my favourite rock bands during my high school years. Of course, you might have discovered them later or earlier than that. The moods and emotions that their music captures resonates with different age groups, although it is during our teen years that a lot of us initially experience these emotions.&lt;/p&gt;
-&lt;p&gt;Linkin Park's music has progressed a lot of over the years, from the radio friendly nu-metal days of Hybrid Theory and Meteora, to alternative rock of Minutes to Midnight, experiments with electronic music on A Thousand Suns, and returning to a heavier rock sound in The Hunting Party. One More Light, their latest album, contains pop elements as well. In this post, we'll try to capture the progression in their style through data analysis on their songs, using Python and Pandas. If you're not a programmer, you can still get a closer understanding of one of your favourite artists by steering clear of the code and focussing on the graphs and insights.&lt;/p&gt;
-&lt;p&gt;The data I'm using is provided by the very awesome Spotify API. Here is the script I used to get all the data. I'm using a python wrapper for this API, called, Spotipy (I mean, there could have been no other name for it). The API provides meta data for all of their songs -  like duration, loudness as well as aggregated content features like Energy, loudness, Instrumentalness (I will be explainging these features as we go on).&lt;/p&gt;
-
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
-&lt;/div&gt;
-&lt;div class="inner_cell"&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;This post consists of 4 parts. We'll start by defining our dataset and the features we have available for LP's songs (Henceforth, Linkin Park would be referred in this post as LP). Then we look at some aggregate properties of each album, to understand the albums on a high level. Then, we'll move on to studying some individual albums, and hope to study specific examples of songs. Finally, we'll try to understand how the general "mood" of the albums have changed over the years.&lt;/p&gt;
+&lt;p&gt;Like a majority of urban teenagers, &lt;a href="https://www.youtube.com/channel/UCZU9T1ceaOgwfLRq7OKFU4Q"&gt;Linkin Park&lt;/a&gt; was one of my favourite rock bands during my high school years. The moods and emotions that their music captures resonates with all kinds of different age groups, so you may have discovered their music later on in your life.&lt;/p&gt;
+&lt;p&gt;Linkin Park's music has progressed a lot of over the years, from the radio friendly nu-metal days of &lt;strong&gt;Hybrid Theory&lt;/strong&gt; and &lt;strong&gt;Meteora&lt;/strong&gt;, to the alternative rock of &lt;strong&gt;Minutes to Midnight&lt;/strong&gt;, experiments with electronic music on &lt;strong&gt;A Thousand Suns&lt;/strong&gt;, and returning to a heavier rock sound in &lt;strong&gt;The Hunting Party&lt;/strong&gt;. &lt;strong&gt;One More Light&lt;/strong&gt;, their latest album, contains pop elements as well. In this post, we'll try to capture the progression in their style through data analysis on their songs, using Python and Pandas. If you're not a programmer, you can still get a closer understanding of one of your favourite artists by steering clear of the code and focussing on the graphs and insights.&lt;/p&gt;
+&lt;p&gt;This post consists of 4 parts. We'll start by &lt;strong&gt;defining our dataset&lt;/strong&gt; and the features we have available for LP's songs. Then, we do some introductory analysis by looking at &lt;strong&gt;song and album lengths&lt;/strong&gt;, and how they have varied accross the albums. In the next part, we look at 3 important features which define LP's general sound - &lt;strong&gt;Energy, Loudness and Valence&lt;/strong&gt;, and how they have varied accorss the albums. We conclude by summarizing the traits which have changed over the years, and giving some fun statistics based on our analysis. Throughout the post, we'll be looking at specific examples of songs to help us understand the variation in these features.&lt;/p&gt;
 &lt;p&gt;The code for this blog post is available on this &lt;a href=""&gt;github repository&lt;/a&gt;&lt;/p&gt;
 
 &lt;/div&gt;
@@ -996,7 +987,7 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="Dataset"&gt;Dataset&lt;a class="anchor-link" href="#Dataset"&gt;&amp;#182;&lt;/a&gt;&lt;/h2&gt;
+&lt;h1 id="Dataset"&gt;Dataset&lt;a class="anchor-link" href="#Dataset"&gt;&amp;#182;&lt;/a&gt;&lt;/h1&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1004,6 +995,7 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;The data I'm using is provided by the very awesome Spotify API. Here is the script I used to get all the data. I'm using a python wrapper for this API, called, Spotipy (I mean, there could have been no other name for it). The API provides meta data for all of their songs -  like duration, loudness as well as aggregated content features like Energy, loudness, Instrumentalness (I will be explainging these features as we go on).&lt;/p&gt;
 &lt;p&gt;Let's start by loading our data and seeing what features we have.&lt;/p&gt;
 
 &lt;/div&gt;
@@ -2154,4 +2146,4 @@ Name: album, dtype: int64&lt;/pre&gt;
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="python"></category><category term="pandas"></category><category term="data-analysis"></category></entry></feed>
+</summary><category term="python"></category><category term="pandas"></category><category term="data-analysis"></category><category term="spotify-api"></category></entry></feed>
