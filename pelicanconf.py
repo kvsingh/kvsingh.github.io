@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Karanveer Singh'
 SITENAME = u'UnInhibited Zombie'
-SITEURL = 'https://kvsingh.github.io'
+#SITEURL = 'https://kvsingh.github.io'
+SITEURL = "http://localhost:8000"
 SITETITLE = 'UnInhibited Zombie'
 
 PATH = 'content'
@@ -41,20 +42,20 @@ DEFAULT_PAGINATION = 5
 MARKUP = ('md', 'ipynb')
 
 PLUGIN_PATH = './plugins'
-PLUGINS = ['ipynb.markup']
+PLUGINS = ['ipynb.markup', 'i18n_subsites', 'tag_cloud', 'cid_filters']
 
-#THEME = "/home/karan/pelican-themes/"
-#THEME = "blueidea"
-#THEME = "bulrush"
-#THEME = "iris"
+DISPLAY_PAGES_ON_MENU = True
 
-#THEME = "aboutwilson"
-#THEME = "nikhil-theme"
-#THEME = "tuxlite_tbs"
-#THEME = "alchemy"
 
 #THEME = "Flex"
 THEME = "pure-single"
+
+JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
+NEST_HEADER_IMAGES = 'background.jpg'
+
+#COLOR_SCHEME_CSS = "darkly.css"
+#NEST_SOCIAL_COLUMN_TITLE = u'Social'
+
 
 SOCIAL = (
         ('github', 'https://github.com/kvsingh/'),
@@ -62,10 +63,11 @@ SOCIAL = (
         ('rss', 'https://kvsingh.github.io/feeds/all.rss.xml')
     )
 
-#PYGMENTS = 'emacs'
+PYGMENTS_STYLE = 'monokai'
 
 IGNORE_FILES = ['.ipynb_checkpoints']
 IPYNB_IGNORE_CSS=True
+IPYNB_SKIP_CSS=True
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
 LOAD_CONTENT_CACHE = False
