@@ -41,7 +41,7 @@
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[1]:&lt;/div&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[25]:&lt;/div&gt;
 &lt;div class="inner_cell"&gt;
     &lt;div class="input_area"&gt;
 &lt;div class=" highlight hl-ipython2"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;search&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;search&lt;/span&gt;
@@ -71,33 +71,6 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class="output_wrapper"&gt;
-&lt;div class="output"&gt;
-
-
-&lt;div class="output_area"&gt;
-
-&lt;div class="prompt"&gt;&lt;/div&gt;
-
-
-&lt;div class="output_subarea output_text output_error"&gt;
-&lt;pre&gt;
-&lt;span class="ansi-red-fg"&gt;---------------------------------------------------------------------------&lt;/span&gt;
-&lt;span class="ansi-red-fg"&gt;ImportError&lt;/span&gt;                               Traceback (most recent call last)
-&lt;span class="ansi-green-fg"&gt;&amp;lt;ipython-input-1-b9669c5a6ebf&amp;gt;&lt;/span&gt; in &lt;span class="ansi-cyan-fg"&gt;&amp;lt;module&amp;gt;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;()&lt;/span&gt;
-&lt;span class="ansi-green-fg"&gt;----&amp;gt; 1&lt;/span&gt;&lt;span class="ansi-red-fg"&gt; &lt;/span&gt;&lt;span class="ansi-green-fg"&gt;from&lt;/span&gt; search &lt;span class="ansi-green-fg"&gt;import&lt;/span&gt; search
-&lt;span class="ansi-green-intense-fg ansi-bold"&gt;      2&lt;/span&gt; outputfilename &lt;span class="ansi-blue-fg"&gt;=&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;lyrics.csv&amp;#34;&lt;/span&gt;
-&lt;span class="ansi-green-intense-fg ansi-bold"&gt;      3&lt;/span&gt; artists &lt;span class="ansi-blue-fg"&gt;=&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;[&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;&amp;#34;cigarettes after sex&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;eric clapton&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;damien rice&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;dire straits&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt;            &lt;span class="ansi-blue-fg"&gt;&amp;#34;the black keys&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;Eminem&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;Porcupine tree&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;Northlane&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt;            &lt;span class="ansi-blue-fg"&gt;&amp;#34;incubus&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;,&lt;/span&gt; &lt;span class="ansi-blue-fg"&gt;&amp;#34;radiohead&amp;#34;&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;]&lt;/span&gt;
-&lt;span class="ansi-green-intense-fg ansi-bold"&gt;      4&lt;/span&gt; 
-&lt;span class="ansi-green-intense-fg ansi-bold"&gt;      5&lt;/span&gt; &lt;span class="ansi-green-fg"&gt;def&lt;/span&gt; get_lyrics&lt;span class="ansi-blue-fg"&gt;(&lt;/span&gt;url&lt;span class="ansi-blue-fg"&gt;)&lt;/span&gt;&lt;span class="ansi-blue-fg"&gt;:&lt;/span&gt;
-
-&lt;span class="ansi-red-fg"&gt;ImportError&lt;/span&gt;: No module named search&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
 &lt;/div&gt;
 &lt;/div&gt;
 
