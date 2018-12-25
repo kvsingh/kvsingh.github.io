@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>UnInhibited Zombie</title><link>https://kvsingh.github.io/</link><description></description><lastBuildDate>Sat, 20 Oct 2018 21:00:00 +0530</lastBuildDate><item><title>Analyzing the evolution of Linkin Park's music over the years</title><link>https://kvsingh.github.io/lp-music.html</link><description>
+<rss version="2.0"><channel><title>UnInhibited Zombie</title><link>https://kvsingh.github.io/</link><description></description><lastBuildDate>Sat, 22 Dec 2018 21:00:00 +0530</lastBuildDate><item><title>Analyzing the evolution of Linkin Park's music over the years Part 2 : Moods</title><link>https://kvsingh.github.io/lp-music-2.html</link><description>
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;
+&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;In the &lt;a href="https://kvsingh.github.io/lp-music.html"&gt;previous&lt;/a&gt; blog post, we saw how Linkin Park's musical style changed over the years, by looking at the mean and variation of audio features of their songs. In particular, we looked at 4 audio features - duration, energy, loudness, and valence. In this post, we'll try to encapsulate 2 of those features (&lt;strong&gt;energy and valence&lt;/strong&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Karanveer Singh</dc:creator><pubDate>Sat, 22 Dec 2018 21:00:00 +0530</pubDate><guid isPermaLink="false">tag:kvsingh.github.io,2018-12-22:/lp-music-2.html</guid><category>python</category><category>pandas</category><category>data-analysis</category></item><item><title>Analyzing the evolution of Linkin Park's music over the years</title><link>https://kvsingh.github.io/lp-music.html</link><description>
 &lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;

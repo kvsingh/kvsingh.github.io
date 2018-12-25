@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UnInhibited Zombie, ">
+
+        <link rel="alternate"  href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" title="UnInhibited Zombie Full Atom Feed"/>
+        <link rel="alternate" href="http://localhost:8000/feeds/all.rss.xml" type="application/rss+xml" title="UnInhibited Zombie Full RSS Feed"/>
+
+        <title>Analyzing the evolution of Linkin Park's music over the years Part 2 : Moods // UnInhibited Zombie // </title>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pure.css">
+    <link rel="stylesheet" href="https://kvsingh.github.io/theme/css/pygments.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".content").fitVids();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="pure-g-r" id="layout">
+        <div class="sidebar pure-u">
+            <div class="cover-img" style="background: none repeat scroll 0% 0% #3D4F5D">
+                <div class="cover-body">
+                    <header class="header">
+                        <hgroup>
+                            <img class="avatar" src="https://avatars2.githubusercontent.com/u/822537?s=460&v=4">
+                            <h1 class="brand-main"><a href="https://kvsingh.github.io">UnInhibited Zombie</a></h1>
+                            <p class="tagline"></p>
+                                <p class="social">
+                                    <a href="https://github.com/kvsingh/">
+                                        <i class="fa fa-github fa-3x"></i>
+                                    </a>
+                                    <a href="https://soundcloud.com/unzombie">
+                                        <i class="fa fa-soundcloud fa-3x"></i>
+                                    </a>
+                                    <a href="https://kvsingh.github.io/feeds/all.rss.xml">
+                                        <i class="fa fa-rss fa-3x"></i>
+                                    </a>
+                                </p>
+                        </hgroup>
+                    </header>
+                </div>
+            </div>
+        </div>
+    <div class="pure-u">
+        <div class="content">
+            <section class="post">
+                <header class="post-header">
+                    <h1>Analyzing the evolution of Linkin Park's music over the years Part 2 : Moods</h1>
+                        <p class="post-meta">
+                            // under                                 <a class="post-category" href="https://kvsingh.github.io/tag/python.html">python</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/pandas.html">pandas</a>
+                                <a class="post-category" href="https://kvsingh.github.io/tag/data-analysis.html">data-analysis</a>
+                        </p>
+                </header>
+            </section>
+            
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the <a href="https://kvsingh.github.io/lp-music.html">previous</a> blog post, we saw how Linkin Park's musical style changed over the years, by looking at the mean and variation of audio features of their songs. In particular, we looked at 4 audio features - duration, energy, loudness, and valence. In this post, we'll try to encapsulate 2 of those features (<strong>energy and valence</strong>) into a new label, known as the "mood" of a song, and see how the general mood of their albums changed with the albums. You don't need to read the previous post to understand this one. Again, if you're not a programmer, don't worry, you can gain value from this post by ignoring the code and focussing on the insights.</p>
+<p>The code for this post is available at <a href="https://github.com/kvsingh/linkin-park-analysis">this github repository</a>.</p>
+<p>Before we start the analysis, though, let me try to articulate what I mean when I say "mood" of a song.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Mood-and-Music">Mood and Music<a class="anchor-link" href="#Mood-and-Music">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you are anything more than a casual listener of music, you will find a strong correlation between a song and the specific emotions it invokes in you. <strong>Some skilled listeners might even experience using music as a tool to manipulate or "hack" their emotions</strong> - listening to a particular song to switch from one mood to the next. For example - playing an <strong>energetic</strong> song when they're feeling lethargic, to get some momentum and start doing things. Or, after a long day at work, putting on some <strong>"peaceful"</strong> music to switch from a hyper-focused state to a more relaxed state of mind. <strong>"Somber" or "neutral"</strong> music is usually considered to be suited to listening while working.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Dataset">Dataset<a class="anchor-link" href="#Dataset">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We'll be using the <a href="https://developer.gracenote.com/web-api">Gracenote Music Web API</a> to get the "mood" information for Linkin Park's songs. <a href="http://www.gracenote.com/computing-musical-mood-at-gracenote/">This blog post</a> contains more detailed information on the algorithms behind the classification of the mood of each song. For the purpose of this post, though, you can just consider that some very cool people have labeled the "mood" of almost every song known. We will be using a subset of 9 moods, of the 25 moods used by Gracenote:</p>
+<ul>
+<li>Peaceful</li>
+<li>Sentimental</li>
+<li>Upbeat</li>
+<li>Sensual</li>
+<li>Serious</li>
+<li>Somber</li>
+<li>Exciting</li>
+<li>Energizing</li>
+<li>Aggressive</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="https://github.com/kvsingh/linkin-park-analysis/blob/master/get-data.ipynb">Here</a> is the script I used to get all the data, using Spotify Web API's python wrapper - <a href="https://github.com/plamere/spotipy">Spotipy</a> and Gracenote web API's python wrapper - <a href="https://github.com/cweichen/pygn">pygn</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introductory-Analysis">Introductory Analysis<a class="anchor-link" href="#Introductory-Analysis">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We start by looking at what data we have available, and the frequencies of moods in LP's songs.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lp-data-moods.p&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">data</span><span class="o">.</span><span class="n">mood</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[49]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f3ce0db1610&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAsMAAAIHCAYAAAB69VHgAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADl0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uIDIuMS4yLCBodHRwOi8vbWF0cGxvdGxpYi5vcmcvNQv5yAAAIABJREFUeJzt3X247WVdJ/73Rw4+IKKYJwYfECN/KqGCc0SMJp+yQW3KScu8zKj0R83olY6Mjc1ko17qOI0Pk1aOGAb1k9JSf5pZaT5kWj4cBHkQSwW9giHFKZQ0EfAzf6zvlgMe9jmes9f6bvb9el3XvvZe37U2++1yn73e6/7e3/uu7g4AAIzoFnMHAACAuSjDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGFtW+UPu9Od7tRHHnnkKn8kAAADOvvss7/Y3dv39LiVluEjjzwyO3fuXOWPBABgQFX1ub15nGkSAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw9o2d4CNdORz/njuCPvlsy95zNwRAACGYmQYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADGuPZbiqbl1VH6mqj1fVhVX1/On4GVV1SVWdO30cu/y4AACwcbbtxWOuTvLw7v6nqjowyQeq6k+m+57d3X+4vHgAALA8eyzD3d1J/mm6eeD00csMBQAAq7BXc4ar6oCqOjfJF5K8q7s/PN31oqo6r6peUVW3WlpKAABYgr0qw919XXcfm+SuSY6vqmOS/FKSeyd5YJI7JvlPu/veqjqlqnZW1c4rrrhig2IDAMD++7ZWk+juK5O8N8lJ3X15L1yd5LeTHH8T33Nad+/o7h3bt2/f/8QAALBB9mY1ie1VdYfp69skeWSST1bV4dOxSvLYJBcsMygAAGy0vVlN4vAkZ1bVAVmU5zd299ur6j1VtT1JJTk3yc8vMScAAGy4vVlN4rwkx+3m+MOXkggAAFbEDnQAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwrD2W4aq6dVV9pKo+XlUXVtXzp+P3qKoPV9Wnq+oNVXXL5ccFAICNszcjw1cneXh33z/JsUlOqqoTkvz3JK/o7u9O8o9JnrK8mAAAsPH2WIZ74Z+mmwdOH53k4Un+cDp+ZpLHLiUhAAAsyV7NGa6qA6rq3CRfSPKuJJ9JcmV3Xzs95NIkd7mJ7z2lqnZW1c4rrrhiIzIDAMCG2Ksy3N3XdfexSe6a5Pgk997bH9Ddp3X3ju7esX379n2MCQAAG+/bWk2iu69M8t4kD05yh6raNt111ySXbXA2AABYqr1ZTWJ7Vd1h+vo2SR6Z5KIsSvHjp4ednOStywoJAADLsG3PD8nhSc6sqgOyKM9v7O63V9Unkvx+Vb0wyTlJTl9iTgAA2HB7LMPdfV6S43Zz/OIs5g8DAMDNkh3oAAAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFh7LMNVdbeqem9VfaKqLqyqZ0zHn1dVl1XVudPHo5cfFwAANs62vXjMtUlO7e6PVdXtkpxdVe+a7ntFd790efEAAGB59liGu/vyJJdPX19VVRclucuygwEAwLJ9W3OGq+rIJMcl+fB06OlVdV5Vva6qDr2J7zmlqnZW1c4rrrhiv8ICAMBG2usyXFUHJ3lTkmd295eTvDrJUUmOzWLk+GW7+77uPq27d3T3ju3bt29AZAAA2Bh7VYar6sAsivDru/vNSdLdn+/u67r7G0lem+T45cUEAICNtzerSVSS05Nc1N0v3+X44bs87N8muWDj4wEAwPLszWoSJyZ5cpLzq+rc6dh/TvLEqjo2SSf5bJKfW0pCAABYkr1ZTeIDSWo3d71j4+MAAMDq2IEOAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGtW3uAGwhz7v93An23fO+NHcCAGAGRoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFh7LMNVdbeqem9VfaKqLqyqZ0zH71hV76qqT02fD11+XAAA2Dh7MzJ8bZJTu/voJCckeVpVHZ3kOUne3d33TPLu6TYAANxs7LEMd/fl3f2x6eurklyU5C5JfiTJmdPDzkzy2GWFBACAZfi25gxX1ZFJjkvy4SSHdffl011/n+Swm/ieU6pqZ1XtvOKKK/YjKgAAbKy9LsNVdXCSNyV5Znd/edf7uruT9O6+r7tP6+4d3b1j+/bt+xUWAAA20l6V4ao6MIsi/PrufvN0+PNVdfh0/+FJvrCciAAAsBx7s5pEJTk9yUXd/fJd7npbkpOnr09O8taNjwcAAMuzbS8ec2KSJyc5v6rOnY795yQvSfLGqnpKks8l+fHlRAQAgOXYYxnu7g8kqZu4+xEbGwcAAFbHDnQAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwrD2W4ap6XVV9oaou2OXY86rqsqo6d/p49HJjAgDAxtubkeEzkpy0m+Ov6O5jp493bGwsAABYvj2W4e5+f5J/WEEWAABYqW378b1Pr6qfSrIzyand/Y+7e1BVnZLklCQ54ogj9uPHATflvmfed+4I++X8k8+fOwIAg9rXC+heneSoJMcmuTzJy27qgd19Wnfv6O4d27dv38cfBwAAG2+fynB3f767r+vubyR5bZLjNzYWAAAs3z6V4ao6fJeb/zbJBTf1WAAA2Kz2OGe4qn4vyUOT3KmqLk3yX5M8tKqOTdJJPpvk55aYEQAAlmKPZbi7n7ibw6cvIQsAAKyUHegAABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWHssw1X1uqr6QlVdsMuxO1bVu6rqU9PnQ5cbEwAANt7ejAyfkeSkGx17TpJ3d/c9k7x7ug0AADcreyzD3f3+JP9wo8M/kuTM6eszkzx2g3MBAMDS7euc4cO6+/Lp679PcthNPbCqTqmqnVW184orrtjHHwcAABtvvy+g6+5O0uvcf1p37+juHdu3b9/fHwcAABtmX8vw56vq8CSZPn9h4yIBAMBq7GsZfluSk6evT07y1o2JAwAAq7M3S6v9XpK/TnKvqrq0qp6S5CVJHllVn0ryA9NtAAC4Wdm2pwd09xNv4q5HbHAWAABYKTvQAQAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADEsZBgBgWMowAADDUoYBABiWMgwAwLC27c83V9Vnk1yV5Lok13b3jo0IBQAAq7BfZXjysO7+4gb8dwAAYKVMkwAAYFj7OzLcSd5ZVZ3kNd192o0fUFWnJDklSY444oj9/HEAm89F977P3BH2y30+edHcEQBms78jw9/X3Q9I8qgkT6uq77/xA7r7tO7e0d07tm/fvp8/DgAANs5+leHuvmz6/IUkb0ly/EaEAgCAVdjnMlxVt62q2619neQHk1ywUcEAAGDZ9mfO8GFJ3lJVa/+ds7r7TzckFQAArMA+l+HuvjjJ/TcwCwAArJSl1QAAGJYyDADAsJRhAACGpQwDADAsZRgAgGEpwwAADGt/1hkGgFn9xs+/Z+4I++Vp/+vhc0eA4RkZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBhKcMAAAxLGQYAYFjKMAAAw1KGAQAYljIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGtW3uAADAzdPLnvBDc0fYL6e+4e1zR2ATMDIMAMCwlGEAAIalDAMAMCxlGACAYSnDAAAMSxkGAGBYyjAAAMNShgEAGJYyDADAsJRhAACGZTtmAICboUuf85dzR9gvd33Jv5o7QhIjwwAADEwZBgBgWMowAADDUoYBABiWMgwAwLCUYQAAhqUMAwAwrP0qw1V1UlX9TVV9uqqes1GhAABgFfa5DFfVAUl+I8mjkhyd5IlVdfRGBQMAgGXbn5Hh45N8ursv7u6vJ/n9JD+yMbEAAGD5qrv37RurHp/kpO5+6nT7yUke1N1Pv9HjTklyynTzXkn+Zt/jzu5OSb44d4hBee7n5fmfl+d/Pp77eXn+53Vzf/7v3t3b9/SgbctO0d2nJTlt2T9nFapqZ3fvmDvHiDz38/L8z8vzPx/P/bw8//Ma5fnfn2kSlyW52y637zodAwCAm4X9KcMfTXLPqrpHVd0yyU8kedvGxAIAgOXb52kS3X1tVT09yZ8lOSDJ67r7wg1LtjltiekeN1Oe+3l5/ufl+Z+P535env95DfH87/MFdAAAcHNnBzoAAIalDAMAMCxlGACAYSnDAJtIVd2iqn587hwAo3AB3W5U1bPWu7+7X76qLCOrqvOT3PgX9EtJdiZ5YXf/n9WnGkdVHZXk0u6+uqoemuR+SX6nu6+cN9nWN8pC95tVVf0/SV6d5LDuPqaq7pfkh7v7hTNH29Kq6lX51r/539Tdv7DCOEO5idfbb+ru+60wzsotfQe6m6nbzR2AJMmfJLkuyVnT7Z9IclCSv09yRpJ/M0+sYbwpyY6q+u4sltd5axb/Xzx61lRj+POq+o9J3pDkK2sHu/sf5os0lNcmeXaS1yRJd59XVWclUYaXa+fcAQb2Q9Pnp02ff3f6/KQZsqyckWE2rar6WHc/YHfHqur87r7vXNlGsMtz/ewkX+vuV1XVOd193NzZtrqqumQ3h7u7v2vlYQZUVR/t7gfu+vteVed297FzZ4Nl2t3f+N29Fm81RobXUVW3TvKUJN+T5NZrx7v7Z2cLNZYDqur47v5IklTVA7PY4CVJrp0v1jCuqaonJjk514/CHzhjnmF09z3mzjC4L07ThDpJqurxSS6fN9I4qmp7kv+U5Ojc8LX34bOFGkdV1Ynd/cHpxvdmgOvLlOH1/W6STyb510lekMXpgotmTTSWpyZ5XVUdnKSSfDnJU6vqtkn+26zJxvAzSX4+yYu6+5KqukeuP3XGElXVQUmeleSI7j6lqu6Z5F7d/faZo43iaVlMDbp3VV2W5JIMcrp4k3h9FlOEHpPF36CTk1wxa6JxPCWL193bT7evTLLlBwBNk1jH2umCqjqvu+9XVQcm+cvuPmHubCNZ+0fZ3V+aOwusQlW9IcnZSX5quoDroCR/5TT9alTVAd193fTG+xbdfdXcmUZSVWd3979ce+2djn20ux84d7ZRjPa6a2R4fddMn6+sqmOyuHDrO2fMM5SqulWSxyU5Msm2qkqSdPcLZow1jGne6re8WzZvdSWO6u4nTNNU0t1frbV/AKzCJVX1p1mMTr5n7jADWnvtvbyqHpPkfye544x5hlFVhyV5cZI7d/ejquroJA/u7tNnjrZUyvD6TquqQ5M8N8nbkhyc5FfmjTSUt2axlNrZSa6eOcuIdl3a69ZJfixekFbl61V1m1w/Z/Wo+DewSvfO4ur6pyU5varenuT3u/sD88YaxgunkclTk7wqySFJnjlvpGGckeS3k/yX6fbfZvGmcEuXYdMk2LSq6oLuPmbuHFxv7fTl3Dm2uqp6ZJJfzuIConcmOTHJT3f3++bMNaJpQOTXkjypuw/Y0+PZf7tewLXeMTbeqCupGBleR1XtdhTYafqV+auqum93nz93kBFV1a5L6dwii5FifzNWoLvfVVUfS3JCFhePPqO7vzhzrKFU1UOSPCHJSVmsf2tXwNV5VZIbL+W1u2NsvK9U1Xfk+rNSJ2RxhnZL88K2vq/s8vWtszhtZjWJ1fm+JD89zV29OotS0Ft9J5xN5GW7fH1tks9GIVilh2Txb6CzWNLuLfPGGUdVfTbJOUnemOTZ3f2V9b+DjVBVD07yvUm232gn2ENy/bKaLNezspgWelRVfTDJ9iymyG1ppkl8G6YLuv6sux86d5YRVNXdd3e8uz+36iywSlX1m0m+O8nvTYeekOQz3f20m/4uNkpVHdLdX547x2im0fiHZrGc2v/a5a6rkvxRd39qjlwjmXrOdUnulcUA1N9ksaLKlr5mQRn+Nkxzxz7a3d89d5atbO2FqKp2e7GWLWlXY7qA5b8m+f7p0F8kecEoS+3Mqao+meQ+Pf2BrqpbJLmwu+8zb7Ktrap+sbt/tapeubv7u/sXVp1pRFV1d4Me81hv59e5Mq2CaRLrqKrzc/3SUgdkcbrAfOHlOyuLKSlnZ/H877qkVCextNdqvC7JBbl+asSTs7jK+EdnSzSOTyc5IslaIbjbdIzlWpsGd/asKbhVVZ2WaVnNtYN2oFueqvoXSe6S5DZVdVyuf909JMlBswVbESPD67jRafprk3y+u20DzBB2dwXxCFcVz6mq/iiLN3y3T/LAJB+Zbj8oyUdM0Vq9aVT+YNMmVqeqPp7FNImzszhlnyTpbm9SlqSqTk7y01lcKL1zl7uuSnJGd795jlyrYmR4fduSXNrdV1fVQ5M8rqp+p7uvnDnXEKrq3Ule1t3v2OXYad19yoyxRvLPVfV9a2urVtWJSf555kxb3UvnDkBSVWdlMW/1uiQfTXJIVf1ad/+PeZMN49rufvXcIUbS3WcmObOqHtfdb5o7z6oZGV5HVZ2bxbukI5O8I4tNIL6nux89Z65RVNXFSf4uyXu6+/nTsS0/d2mzqKpjk5yZxShlJfmHLNa6/fiswQZSVYfkhqeJzZdfgbUzIFX1pCyW83pOkrOtZLMaVfW8JF/IYgWVb1645fd/earqJ7v7/6uqU7P7nUdfPkOslTEyvL5vdPe1VfWjSV7V3a+qqnPmDjWQK5M8Iskrp9PHPzlznqF097lJ7j8VsjhNvDpVdUoW1yd8Lck3Mi0rGPPlV+XAqjowyWOT/Hp3X1NVRo5W5+Tp87N3Oeb3f7luO30+eNYUM1GG13dNVT0xyU8l+TfTsQNnzDOamuZo//uq+ukkH0hy6LyRtr5dRgiedaPjSbb+CMEm8ewkx9hoYzavyWJd7Y8nef90/Yg3gyvS3feYO8Nouvs10+fnz51lDreYO8Am9zNJHpzkRd19SVXdI8nvzpxpJN9cZ7K7z8hicv875wozkLURgtvdxAfL95kkX507xKi6+5XdfZfufnQvfC7Jw+bONYqqOqiqfnlaUSJVdc+q+qG5c42gqs6sqjvscvvQqnrdnJlWwZxhNh3rDM+vqg5I8gvd/Yq5s4xoWtrot5N8ODecM2md2xWoqmdk8fxfleS3khyX5Dnd7c34ClTVG7JYSeKnuvuYqjooyV9ZyWb5quqc7j5uT8e2GiPD66iqE6vqXVX1t1V1cVVdMl3UxXKdNX0+O4slXs7e5WPnTX0TG6e7r0vyxLlzDOw1Sd6T5EO54e8/q/Gz0xz5H8xiataTk7xk3khDOaq7fzXJNUnS3V/NDdebZ3luMW0wliSZBqW2/JTaLf8/cD+dnuQ/5EZrHbJc3f1D02fzxub1war69SRvSPKVtYPd/bH5Ig3jwO5+1p4fxpKsFa9HJ/nd7r6w1ibNswpfr6rbZFrVoKqOyi5nSFiqlyX566r6g+n2jyV50Yx5VsI0iXVU1Ye7+0Fz5xhVVe1uCbUvJfmczU+Wr6reu5vDbReo5auqF2dxAdcfxdJSK1dVv53Fblz3SHL/LHYgfV93/8tZgw2iqh6Z5JeTHJ3FdSInZrGs4/vmzDWKqvqeXD9H/j3d/Yk586yCMryOqnpJFn8E35wbviAZGVuBqvpQFmt8npfFSM19s9ge+PZJ/p35e2xVVXXJbg53d1taagWmXeeOTXJxd19ZVd+R5C7dfd7M0YYxPecnZPG3/0NWVlmNqvqB7v7zGx07edqUY8tShtdhZGxeVfXmJM/t7gun20dnsfbqLyZ5s4splquqDkvy4iR37u5HTc//g7v79JmjwVJNUyKelOS7uvsFVXVEkn/R3R+ZOdowqup+WWx4teumM1t6S+DNoKren+TCJKdmsXrQbyW5ursfP2uwJVOG2bSq6oLuPmZ3x9Z2iJor2wiq6k+yuKL+v3T3/atqW5Jzuvu+M0fb8qYNH/5dku+fDr0vyWu6+5rZQg2kql6dxWYnD+/u+0wXFL2zux84c7QhTEt53S+LUvaN6XB398/Ol2oM0xvBU5P83HToV7r792aMtBIuoFuHkbHZfWJ6Ufr96fYTpmO3ynSVMUt1p+5+Y1X9UpJMuzG6kHQ1Xp3FBj+/Od1+8nTsqbMlGsuDuvsBazuOdvc/VtUt5w41kBO6++i5Qwzq0CTHZ7HW+V2T3L2qqrf4yKml1dZ3RpI/S3Ln6fbfJnnmbGnGc3KST2fxnD8zycVZbLxxTSyAvwpfmebtrV3RfUIWFzCyfA/s7pO7+z3Tx88kMSq5OtdMa22v/e5vz/UjlCzfX0+DT6zeh5L8aXeflMXfnDsn+eC8kZbPyPD6jIzNZHoh+q3uflIWS73c2D+tONKInpXkbUmOqqoPJtmeZEvPG9tErquqo7r7M0lSVd8Vyzuu0iuTvCXJd1bVi7L4vf/leSMN5XeyKMR/n8XF65XFNIn7zRtrCD+Q5CFV9SvTfPmXZjF3e0tThtdnZGwm3X1dVd29qm7Z3V+fO8+gjkryqCR3S/K4JA+Kvxmr8h+TvHeXTX6OzGJ7eFagu19fVWcneUQWReyx3X3RzLFGcnoWU4POjxH5VfulTPPls7hg/aosBqS29JkpL2zrMzI2r4uz2Pjhbbnhpg8vny/SUJ7b3X8wXTz0sCQvzWLeqrW3l+87khyTRQl+bJIHxxvxlZjOSl3Y3fdO8sm58wzqiu5+29whBjXkfHlzhte3NjL2vVnMHf5UvIFYpc8keXsWv6e32+WD1Vg7Lf+YJK/t7j9OsuX/KG4Sz522Az4kizciv57FGxGWbNqK/G+m5dSYxzlVdVZVPbGqfnTtY+5Qgxhyvrxitz4jYzPq7ucnSVUdNO1Nz2pdVlWvSfLIJP99WsXDG+jV+JY3IlX1wjkDDebQJBdW1Udyw7NSPzxfpKHcJou5wj+4y7HOYgMslmvI+fLWGV5HVZ3T3cdV1X9Lcn53n7V2bO5sI6iqB2cxd+zg7j6iqu6f5Oe6+9/PHG0IVXVQkpOy+N3/VFUdnuS+dv5bvqp6e5LLsngj8oAk/5zkI919/1mDDaKqHrK74939F6vOAqtWVffO9fPl3z3CfHlleB1ekOZVVR/O4l3p29begOxuIw7YarwRYURV9Yvd/atV9apMp+l31d2/MEMsBmCaxPp+PIsXpJdO+9MfnuTZM2caSnf/3WJDnG+yvBRb3jQt6M273L48yeXzJRqeqfZNAAAEG0lEQVRLVV2Vby1jX0qyM8mp3X3xt34XG2BtBHLnrCkYjjK8Di9Is/u7qvreJD1tT/uMXP/HEmBZ/meSS5OclcWp4p/I4oLqjyV5XZKHzpZsC+vuP5q+/Gp3/8Gu91XVj80QiUGYJsGmVVV3SvJrWSwCXknemeQZ3f1/Zg0GbGlV9fEbT4erqnO7+9jd3cfGqqqPdfcD9nQMNoqRYTat7v5ikifNnQMYzler6seT/OF0+/FJvjZ9bQRpSarqUUkeneQuVfXKXe46JMm186RiBMowm9a0vuH/m8XGA9/8Xe3un50rEzCEJ2VxVuo3syi/H0ryk1V1myRPnzPYFve/s5gv/MNJzt7l+FVJ/sMsiRiCaRJsWlX1V0n+Mos/it+8cK673zRbKACWqqoO7O5r5s7BOJRhNq21OXpz5wDGcqNT9Gu+lGRnd7911XlGU1UnJnlekrtncVawknR3f9ecudi6TJNgM3t7VT26u98xdxBgKLdOcu8kaysaPC7JJUnuX1UP6+5nzpZsDKdnMS3iBmcFYVmMDLNpTWt9HpTk60muyfWjA4fMGgzY0qrqQ0lO7O7rptvbspiy9X1ZbIRy9Jz5trqq+nB3P2juHIzDyDCb2e2zuJDlHt39gqo6IsnhM2cCtr5DkxycxdSIJLltkjt293VVdfV8sYbx3qr6H1ms8//N57u7PzZfJLYyZZjN7DeSfCPJw5O8IIsrit+U5IFzhgK2vF9Ncm5VvS+LM1Lfn+TFVXXbJH8+Z7BBrI0K79jlWGfxWgAbzjQJNq21Rdar6pzuPm46ZsF7YOmq6s5JnpzFrpcHJ7m0u98/bypgGYwMs5ldU1UHZFrkflp3+BvzRgK2uqp6ahbbv981yblJTkjy1zEyuRJVdViSFye5c3c/qqqOTvLg7j595mhsUbeYOwCs45VJ3pLkO6vqRUk+kMUfSIBlekYW07E+190PS3JckivnjTSUM5L8WZI7T7f/NokVPFgaI8NsWt39+qo6O8kjspi399juvmjmWMDW97Xu/lpVpapu1d2frKp7zR1qIHfq7jdW1S8lSXdfW1WWWGNplGE2te7+ZJJPzp0DGMqlVXWHJP9/kndV1T8m+dzMmUbylar6jlw/Re6EXL+yB2w4F9ABwE2oqodksczjn3b31+fOM4KqekCSVyU5JskFSbYneXx3nzdrMLYsI8MAcBO6+y/mzjCgo5I8Ksndstj970HRV1giF9ABAJvJc7v7y1lsfvKwJL+Z5NXzRmIrU4YBgM1k7WK5xyR5bXf/cZJbzpiHLU4ZBgA2k8uq6jVJnpDkHVV1q+grLJEL6ACATaOqDkpyUpLzu/tTVXV4kvt29ztnjsYWpQwDADAspx0AABiWMgwAwLCUYQAAhqUMAwAwLGUYAIBh/V+b2xZrSMMU2wAAAABJRU5ErkJggg==
+">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we can see, most of LP's songs come in the "Sensual" mood category, with "Energizing" and "Serious" being the second and third most popular moods. Some examples of sensual songs are <strong>"Shadow of the Day", "Somewhere I Belong" and "Crawling"</strong>. <strong>"Faint"</strong> is an example of an energizing song, while <strong>"The Little Things Give You Away"</strong> comes under the "serious" category.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Mood-Taxonomoy-based-on-Arousal-Positivity-scale">Mood Taxonomoy based on Arousal-Positivity scale<a class="anchor-link" href="#Mood-Taxonomoy-based-on-Arousal-Positivity-scale">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here, I'm going to refer to some super interesting work done by <a href="https://github.com/neokt">Ting Neo</a> on <a href="https://neokt.github.io/projects/audio-music-mood-classification/">Music Mood Clasification</a>. She defines these moods on an <strong>arousal-positivity</strong> scale. Essentially, moods are defined using 2 axis - <strong>Arousal</strong>, and <strong>Positivity</strong>. Her modeling of the 25 Gracenote moods is done by having 5 separate classes for each axis. Since I have narrowed it down to 9 moods, we'll be having 3 classes on each scale. This is how it looks like:</p>
+<p><img src="images/moodss.png" alt="Moods" title="Moods"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Arousal is an indication of how Energetic or Calm the music is, while positivity is self-explanatory. These can be considered analogous to the <strong>"energy" and "valence"</strong> features I mentioned in the last blog post.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="LP's-albums-on-Arousal-Positivity-scale">LP's albums on Arousal-Positivity scale<a class="anchor-link" href="#LP's-albums-on-Arousal-Positivity-scale">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Analyzing the moods of individual songs in the albums can get complicated real quick since there are 9 moods and 7 albums. Instead, let's try to represent the albums on the arousal-positivity scale, by looking at the average values of arousal and positivity for each album's songs. Let's create 2 mappings from each mood - one mapping the mood to the level of arousal, and the other, to the level of positivity.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">mood_positiveness</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;peaceful&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;upbeat&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;excited&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;sentimental&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;sensual&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;energizing&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;somber&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;serious&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;aggressive&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+<span class="n">mood_energeticness</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;excited&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;energizing&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;aggressive&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;upbeat&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;sensual&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;serious&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;peaceful&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;sentimental&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;somber&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;positiveness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mood</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">mood_positiveness</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>  
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;energeticness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mood</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">mood_energeticness</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>  
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we'll plot LP's albums on the arousal-positivity scale.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;album&#39;</span><span class="p">)[</span><span class="s1">&#39;positiveness&#39;</span><span class="p">,</span> <span class="s1">&#39;energeticness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">b</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;energeticness&#39;</span><span class="p">,</span> <span class="s1">&#39;positiveness&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;energeticness&#39;</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;positiveness&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/lp-moods.png" alt="LP-Moods" title="LP-Moods"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Hybrid Theory and Meteora seem to be <strong>"Medium"</strong> energy albums, with less depth in the themes they try to cover. Hence, their positiveness is greater than the other albums, in spite of dealing with dark "negative" themes. <strong>Hunting Party</strong> was similar in the sense of being "medium" energy, but had more depth in the negative themes. Overall it seems to be an <strong>"Energizing"</strong> album. Minutes to Midnight, One More Light, and Living Things are all <strong>"Sensual"</strong> albums. A Thousand Suns seems to be the outlier here. It is also the only <strong>"Serious"</strong> LP album. I would like to point out that these mood definitions are not the exact mood definitions provided by Gracenote - they are merely given by me, based on Ting Neo's model of the arousal-positivity scale (by using a threshold of 0.5 and -0.5 on that scale).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see if this way of representing the albums agrees with Gracenote's mood labels, by looking at the most commonly occurring mood in each album:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;album&#39;</span><span class="p">)[</span><span class="s1">&#39;mood&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[4]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>album
+Huntingparty    energizing
+Hybrid             sensual
+Livingthings       sensual
+Meteora            sensual
+Minutes            sensual
+Onemorelight       sensual
+Thousandsuns       serious
+Name: mood, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Well, looks like it does. Which doesn't say much, other than that the arousal-positivity model, using a threshold of 0.5 and -0.5, is a nice way of representing the moods defined by Gracenote.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this blog post, we looked at the concept of mood-based listening. As an example, we analyzed LP's albums and the moods they invoke.</p>
+<p>I have been working on a web app, where you can create mood-based playlists on top of your Spotify library. The playlists can be curated according to the level of novelty or newness you are looking for, in your playlist. Based on that parameter, it creates a playlist with a customized ratio of songs in your library, versus songs which you haven't heard.</p>
+<p>I will be introducing this app in the next blog post. Thanks for reading.</p>
+
+</div>
+</div>
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            <a href="#" class="go-top">Go Top</a>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = "inzombies"; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+<footer class="footer">
+    <p>&copy; Karanveer Singh &ndash;
+        Built with <a href="https://github.com/PurePelicanTheme/pure-single">Pure Theme</a>
+        for <a href="http://blog.getpelican.com/">Pelican</a>
+    </p>
+</footer>        </div>
+    </div>
+    </div>
+    <script>
+        var $top = $('.go-top');
+
+        // Show or hide the sticky footer button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 200) {
+                $top.fadeIn(200);
+            } else {
+                $top.fadeOut(200);
+            }
+        });
+
+        // Animate the scroll to top
+        $top.click(function(event) {
+            event.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 300);
+        })
+
+        // Makes sure that the href="#" attached to the <a> elements
+        // don't scroll you back up the page.
+        $('body').on('click', 'a[href="#"]', function(event) {
+            event.preventDefault();
+        });
+    </script>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-41437726-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+    </script>
+
+</body>
+</html>
